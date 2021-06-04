@@ -1,0 +1,18 @@
+//$body-bg: #333;
+//$body-color: #AAA;
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+#headerBar {
+  background-color: #2d4054;
+  color: #C0C0C0;
+  font-family: "Ubuntu", sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+#map {
+  width: 100%;
+  height: 600px;
+}
+
