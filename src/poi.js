@@ -1,4 +1,4 @@
-class Poi {
+export default class Poi {
     constructor (name, type, coord) {
         this.name = name,
         this.type = type,
