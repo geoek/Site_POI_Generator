@@ -5,7 +5,13 @@ import {Group} from 'ol/layer'
 import {Point} from 'ol/geom'
 import {Vector as LayerVector} from 'ol/layer'
 import {Vector as SourceVector} from 'ol/source'
+import {Draw, Select, Modify} from 'ol/interaction'
+import {Circle, Fill, Stroke, Style} from 'ol/style';
+import GeometryType from 'ol/geom/GeometryType';
 import Poi from './poi.js'
+import GeoJSON from 'ol/format/GeoJSON';
+import VectorSource from 'ol/source/Vector';
+
 
 let baselayers = new Group({
 	'title': 'Base Maps',
@@ -42,11 +48,28 @@ var layer = new LayerVector({
 				geometry: new Point(coord)
 			})
 		]
+	}),
+	style: new Style({
+		image: new Circle({
+			radius: 10,
+			fill: new Fill({
+				color: '#3399CC',
+			}),
+			stroke: new Stroke({
+				color: '#fff',
+				width: 0.5,
+			}),
+		}),
 	})
 });
+
 map.addLayer(layer);
 
 
+////////////////////////////
+// POPUP POI              //
+////////////////////////////
+/*
 var container = document.getElementById('popup');
 var content = document.getElementById('popup-content');
 var closer = document.getElementById('popup-closer');
@@ -77,3 +100,109 @@ map.on('singleclick', function (event) {
 	}
 });
 
+*/
+
+/////////////////////////////////////////////////////////////////////
+// Affichage des buffers depuis Postgis avec update de la position //
+/////////////////////////////////////////////////////////////////////
+var geojsonObject = {
+    'type': 'FeatureCollection',
+    'crs': {
+        'type': 'name'
+        },
+        'features':[]
+};
+
+var features = (new GeoJSON()).readFeatures(geojsonObject);
+var source = new VectorSource({
+	features: features,
+	format: new GeoJSON()
+});
+
+var vectorLayer = new LayerVector({
+	title: "Vector",
+	source: source,
+	style: new Style({
+		image: new Circle({
+			radius: 10,
+			fill: new Fill({
+				color: '#FF0000',
+			}),
+			stroke: new Stroke({
+				color: '#fff',
+				width: 0.5,
+			}),
+		}),
+	})
+});
+
+map.addLayer(vectorLayer);
+
+
+var draw
+var typeSelect = document.getElementById('type');
+
+var select = new Select();
+var modify = new Modify({
+	features: select.getFeatures()
+});
+
+function addInteraction(){
+	var value = typeSelect.value;
+	if (value !== 'None') {
+		draw = new Draw({
+		source: source,
+		type: ("Point")       
+		});
+		map.addInteraction(draw);
+		source.addFeatures(draw);
+		console.log(source)
+		}
+	else{
+		map.addInteraction(select);
+		map.addInteraction(modify);
+		}
+
+	}
+
+
+
+typeSelect.onchange = function() {
+	map.removeInteraction(draw);
+	map.removeInteraction(select);
+	map.removeInteraction(modify);
+	addInteraction();
+};
+
+addInteraction();
+
+var writer = new GeoJSON();
+var geojsonStr = writer.writeFeatures(source.getFeatures());
+
+function getfeatures(){
+document.getElementById("demo").innerHTML = geojsonStr;
+}
+/*
+map.on("singleclick", function(evt){
+	// récupération des coordonnées
+	let coord = source.getFeatures()[0].values_.geometry.flatCoordinates
+	let x = coord[0]
+	let y = coord[1]
+	//calculateData(id_request,x,y)
+
+	var myFeature = new Feature({
+		geometry: new Point([x, y]),
+		labelPoint: new Point([x, y]),
+		name: 'My Point'
+	})
+	var myGeoJson = new GeoJSON({
+		dataProjection: 'EPSG:4326',
+		geometryName: 'my_Poi',
+	})
+
+	var test = myGeoJson.writeFeatureObject(myFeature,{dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'})
+	console.log(myFeature)
+	console.log(myGeoJson)
+	console.log(test)
+})
+*/
