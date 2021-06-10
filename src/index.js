@@ -17,6 +17,7 @@ import {register} from 'ol/proj/proj4'
 import {get as olProjGet} from 'ol/proj'
 import {transform} from 'ol/proj'
 import LayerSwitcher from 'ol-layerswitcher'
+import $ from 'jquery';
 
 // ajout de la projection 2154
 proj4.defs('EPSG:2154',"+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
@@ -180,7 +181,7 @@ var poiGeojsonObject = {
 
 };
 
-var poiFeatures = (new GeoJSON()).readFeatures(poiGeojsonObject);
+var poiFeatures = (new GeoJSON()).readFeatures(poiGeojsonObject)
 console.log(poiFeatures)
 var poiSource = new VectorSource({
 	features: poiFeatures,
@@ -222,14 +223,13 @@ var modify = new Modify({
 function addInteraction(){
 	var value = typeInterraction.value
 	if (value !== 'None') {
+		let tempSource = localGeoLayer.getSource()
 		draw = new Draw({
-			source: poiSource,
+			source: tempSource,
 			type: ("Point")       
 		});
 		map.addInteraction(draw)
-		poiSource.addFeatures(draw)
-		console.log(poiSource)
-		debugGeoJson()
+		tempSource.addFeatures(draw)
 	}
 	else {
 		map.addInteraction(select)
@@ -251,20 +251,38 @@ addInteraction()
 // Export de la donnée GeoJson                                     //
 /////////////////////////////////////////////////////////////////////
 
-function debugGeoJson() {
-	var writer = new GeoJSON()
-	var geojsonStr = writer.writeFeatures(poiSource.getFeatures())
-	console.log(poiFeatures)
+function exportGeoJson() {
+	var writer = new GeoJSON({"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" }}, name:'mymap'})
+	
+	var geojsonStr = writer.writeFeatures(localGeoLayer.getSource().getFeatures())
+	var geojsonStr2 = geojsonStr.slice(0, 1) + '"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" } },' + geojsonStr.slice(1);
+	console.log(localGeoLayer.getSource())
 	//var geojsonStr = writer.writeFeatures(transform(poiSource.getFeatures(),'EPSG:4326', 'EPSG:3857'))
 
-	document.getElementById("demo").innerHTML = geojsonStr
+	document.getElementById("demo").innerHTML = geojsonStr2
+
+	$.ajax({
+		url: "./storejson/",
+		type: "get", //send it through get method
+		data: { 
+			data: geojsonStr2,
+		},
+		dataType: 'text',
+		success: function(data,response) {
+			console.log(response)
+			console.log(data)
+		},
+		error: function(xhr) {
+		  console.log('ko')
+		}
+	});
+
 }
 
 map.on("singleclick", function(evt){
-	debugGeoJson()
+	//tester seulement si interaction est modify
+	exportGeoJson()
 })
-
-
 
 
 
