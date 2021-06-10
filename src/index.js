@@ -256,10 +256,8 @@ function exportGeoJson() {
 	
 	var geojsonStr = writer.writeFeatures(localGeoLayer.getSource().getFeatures())
 	var geojsonStr2 = geojsonStr.slice(0, 1) + '"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" } },' + geojsonStr.slice(1);
-	console.log(localGeoLayer.getSource())
-	//var geojsonStr = writer.writeFeatures(transform(poiSource.getFeatures(),'EPSG:4326', 'EPSG:3857'))
 
-	document.getElementById("demo").innerHTML = geojsonStr2
+//	document.getElementById("demo").innerHTML = geojsonStr2
 
 	$.ajax({
 		url: "./storejson/",
@@ -281,7 +279,23 @@ function exportGeoJson() {
 
 map.on("singleclick", function(evt){
 	//tester seulement si interaction est modify
+	console.log("EXPORT")
 	exportGeoJson()
+})
+
+// Permettre la suppression des points sélectionnés
+document.addEventListener('keydown', function (e){
+	console.log(e)
+	if(e.key == "Delete") {
+		//on enleve le comportement par default du navigateur
+		e.preventDefault();
+		//Si un objet est sélectionné, on le supprime
+		if (select.getFeatures().item(0) !== undefined) {
+			var selectedFeature = select.getFeatures().item(0);
+			//Remove it from your feature source
+			localGeoLayer.getSource().removeFeature(selectedFeature)
+		}
+	}
 })
 
 
