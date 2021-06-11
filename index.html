@@ -17,11 +17,13 @@
 				</div>
 			</div>
 			<select id="typeAction">
-				<option value="Point">Add Point</option>
-				<option value="None">Modify</option>
+				<option value="none"> - </selectionner></option>
+				<option value="addPoint">Add Point</option>
+				<option value="modify">Modify</option>
 			</select>
+			<input type="text" name="type" id="typeValue">
 			<div id="demo"></div>
-			<button onclick="getPoiFeatures()">click me</button>
+			<!--<button onclick="getPoiFeatures()">click me</button>-->
 			<div class="row">
 				<!-- MAP -->
 				<div class="col-12" id="map"></div>

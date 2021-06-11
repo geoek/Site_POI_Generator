@@ -8,21 +8,13 @@ import {Vector as LayerVector} from 'ol/layer'
 import {Vector as SourceVector} from 'ol/source'
 import {Draw, Select, Modify} from 'ol/interaction'
 import {Circle, Fill, Stroke, Style} from 'ol/style'
-import GeometryType from 'ol/geom/GeometryType'
 import Poi from './poi.js'
 import GeoJSON from 'ol/format/GeoJSON'
 import VectorSource from 'ol/source/Vector'
-import proj4 from 'proj4'
-import {register} from 'ol/proj/proj4'
-import {get as olProjGet} from 'ol/proj'
-import {transform} from 'ol/proj'
 import LayerSwitcher from 'ol-layerswitcher'
-import $ from 'jquery';
-
-// ajout de la projection 2154
-proj4.defs('EPSG:2154',"+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
-// ensure OL knows about the PROJ4 definitions
-register(proj4);
+import $ from 'jquery'
+import ScaleLine from 'ol/control/ScaleLine'
+import {defaults as defaultControls} from 'ol/control'
 
 
 let baselayers = new Group({
@@ -32,11 +24,11 @@ let baselayers = new Group({
 
 
 const map = new Map({
-/*	controls: defaultControls().extend([
+	controls: defaultControls().extend([
 		new ScaleLine({
-			units: 'degrees',
+			units: 'metric',
 		})
-	]),*/
+	]),
 	layers: [baselayers],
 	target: document.getElementById('map'),
 	view: new View({
@@ -54,6 +46,7 @@ var layerSwitcher = new LayerSwitcher({
   });
 map.addControl(layerSwitcher);
 
+//Utiliser l'instance pour les autres POI
 const myFirstPoi = new Poi({
 	name: 'Poi1',
 	type: 'Nature',
@@ -61,7 +54,7 @@ const myFirstPoi = new Poi({
 })
 
 var coord = [300000, 5950000]
-var layer = new LayerVector({
+var testLayer = new LayerVector({
 	title: "My point",
 	source: new SourceVector({
 		features: [
@@ -72,9 +65,9 @@ var layer = new LayerVector({
 	}),
 	style: new Style({
 		image: new Circle({
-			radius: 10,
+			radius: 3,
 			fill: new Fill({
-				color: '#3399CC',
+				color: '#FF0000',
 			}),
 			stroke: new Stroke({
 				color: '#fff',
@@ -84,7 +77,7 @@ var layer = new LayerVector({
 	})
 });
 
-map.addLayer(layer)
+map.addLayer(testLayer)
 
 
 var localGeoLayer = new LayerVector({
@@ -95,7 +88,7 @@ var localGeoLayer = new LayerVector({
 	}),
 	style: new Style({
 		image: new Circle({
-			radius: 10,
+			radius: 7,
 			fill: new Fill({
 				color: '#3399CC',
 			}),
@@ -108,28 +101,6 @@ var localGeoLayer = new LayerVector({
 });
 
 map.addLayer(localGeoLayer)
-
-
-/*
-new LayerVector({
-	source: new GeoJSON({
-	   projection : 'EPSG:3857',
-	   url: 'data/mygeojson.geojson'
-	}),
-	style: new Style({
-		image: new Circle({
-			radius: 10,
-			fill: new Fill({
-				color: '#0000FF',
-			}),
-			stroke: new Stroke({
-				color: '#fff',
-				width: 0.5,
-			}),
-		}),
-	})
-})
-*/
 
 
 
@@ -170,59 +141,23 @@ map.on('singleclick', function (event) {
 */
 
 /////////////////////////////////////////////////////////////////////
-// Creation de la couche des POI lié à une donnée GeoJson          //
-/////////////////////////////////////////////////////////////////////
-
-var poiGeojsonObject = {
-    'features':[],
-	'type': 'FeatureCollection',
-	'name': 'mygeojson',
-	"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" } },
-
-};
-
-var poiFeatures = (new GeoJSON()).readFeatures(poiGeojsonObject)
-console.log(poiFeatures)
-var poiSource = new VectorSource({
-	features: poiFeatures,
-	format: new GeoJSON()
-});
-console.log(poiSource)
-var poiLayer = new LayerVector({
-	title: "My POI",
-	source: poiSource,
-	style: new Style({
-		image: new Circle({
-			radius: 5,
-			fill: new Fill({
-				color: '#FF0000',
-			}),
-			stroke: new Stroke({
-				color: '#fff',
-				width: 0.5,
-			}),
-		}),
-	})
-});
-
-map.addLayer(poiLayer)
-
-
-/////////////////////////////////////////////////////////////////////
 // Creation des interactions avec la carte                         //
 /////////////////////////////////////////////////////////////////////
 
-var draw
 var typeInterraction = document.getElementById('typeAction')
 
+var draw
 var select = new Select();
 var modify = new Modify({
 	features: select.getFeatures()
 });
 
-function addInteraction(){
-	var value = typeInterraction.value
-	if (value !== 'None') {
+typeInterraction.onchange = function() {
+	map.removeInteraction(draw);
+	map.removeInteraction(select)
+	map.removeInteraction(modify)
+
+	if (typeInterraction.value == 'addPoint') {
 		let tempSource = localGeoLayer.getSource()
 		draw = new Draw({
 			source: tempSource,
@@ -231,20 +166,11 @@ function addInteraction(){
 		map.addInteraction(draw)
 		tempSource.addFeatures(draw)
 	}
-	else {
+	else if (typeInterraction.value == 'modify') {
 		map.addInteraction(select)
 		map.addInteraction(modify)
 	}
 }
-
-typeInterraction.onchange = function() {
-	map.removeInteraction(draw);
-	map.removeInteraction(select)
-	map.removeInteraction(modify)
-	addInteraction()
-};
-
-addInteraction()
 
 
 /////////////////////////////////////////////////////////////////////
@@ -252,18 +178,20 @@ addInteraction()
 /////////////////////////////////////////////////////////////////////
 
 function exportGeoJson() {
-	var writer = new GeoJSON({"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" }}, name:'mymap'})
+	var writer = new GeoJSON()
 	
 	var geojsonStr = writer.writeFeatures(localGeoLayer.getSource().getFeatures())
-	var geojsonStr2 = geojsonStr.slice(0, 1) + '"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" } },' + geojsonStr.slice(1);
+	//il faut rajouter le crs dans la donnée sinon ca bugge
+	geojsonStr = geojsonStr.slice(0, 1) + '"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" } },' + geojsonStr.slice(1);
 
 //	document.getElementById("demo").innerHTML = geojsonStr2
 
+	//envoie du fichier eu serveur via node js
 	$.ajax({
 		url: "./storejson/",
 		type: "get", //send it through get method
 		data: { 
-			data: geojsonStr2,
+			data: geojsonStr,
 		},
 		dataType: 'text',
 		success: function(data,response) {
@@ -277,8 +205,8 @@ function exportGeoJson() {
 
 }
 
+//A chaque click sur la carte on exporte la donnée (ou mettre un bouton save)
 map.on("singleclick", function(evt){
-	//tester seulement si interaction est modify
 	console.log("EXPORT")
 	exportGeoJson()
 })
@@ -298,29 +226,3 @@ document.addEventListener('keydown', function (e){
 	}
 })
 
-
-
-/*
-map.on("singleclick", function(evt){
-	// récupération des coordonnées
-	let coord = source.getFeatures()[0].values_.geometry.flatCoordinates
-	let x = coord[0]
-	let y = coord[1]
-	//calculateData(id_request,x,y)
-
-	var myFeature = new Feature({
-		geometry: new Point([x, y]),
-		labelPoint: new Point([x, y]),
-		name: 'My Point'
-	})
-	var myGeoJson = new GeoJSON({
-		dataProjection: 'EPSG:4326',
-		geometryName: 'my_Poi',
-	})
-
-	var test = myGeoJson.writeFeatureObject(myFeature,{dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'})
-	console.log(myFeature)
-	console.log(myGeoJson)
-	console.log(test)
-})
-*/
