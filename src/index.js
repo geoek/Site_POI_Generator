@@ -159,12 +159,25 @@ typeInterraction.onchange = function() {
 
 	if (typeInterraction.value == 'addPoint') {
 		let tempSource = localGeoLayer.getSource()
+		let idValue = document.getElementById('typeValue')
 		draw = new Draw({
 			source: tempSource,
-			type: ("Point")       
-		});
+			type: ("Point")
+		})
+
 		map.addInteraction(draw)
+		console.log(draw)
 		tempSource.addFeatures(draw)
+
+		//Ajout des attributs
+		draw.on('drawend', function (e) {
+			console.log(localGeoLayer.getSource().getFeatures())
+			e.feature.setProperties({
+				'id': 1234,
+				'name': document.getElementById('typeValue').value
+			  })
+		});
+
 	}
 	else if (typeInterraction.value == 'modify') {
 		map.addInteraction(select)
