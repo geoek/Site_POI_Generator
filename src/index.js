@@ -173,8 +173,9 @@ typeInterraction.onchange = function() {
 		draw.on('drawend', function (e) {
 			console.log(localGeoLayer.getSource().getFeatures())
 			e.feature.setProperties({
-				'id': 1234,
-				'name': document.getElementById('typeValue').value
+				'id': document.getElementById('idValue').value,
+				'name': document.getElementById('nameValue').value,
+				'category': document.getElementById('catValue').value
 			  })
 		});
 
@@ -182,6 +183,24 @@ typeInterraction.onchange = function() {
 	else if (typeInterraction.value == 'modify') {
 		map.addInteraction(select)
 		map.addInteraction(modify)
+
+
+		select.on('select',function (e){
+			if (e.selected.length >= 1 ) {
+				console.log(e)
+				document.getElementById('idValue').value=e.selected[0].values_.id
+				document.getElementById('nameValue').value=e.selected[0].values_.name
+				document.getElementById('catValue').value=e.selected[0].values_.category
+			}
+			else {
+				console.log("Select END")
+				//mise à jour des attributs
+				e.deselected[0].values_.id = document.getElementById('idValue').value
+				e.deselected[0].values_.name=document.getElementById('nameValue').value
+				e.deselected[0].values_.category=document.getElementById('catValue').value
+			} 
+
+		})
 	}
 }
 
