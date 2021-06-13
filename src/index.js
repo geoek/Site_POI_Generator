@@ -153,7 +153,7 @@ var modify = new Modify({
 });
 
 typeInterraction.onchange = function() {
-	map.removeInteraction(draw);
+	map.removeInteraction(draw)
 	map.removeInteraction(select)
 	map.removeInteraction(modify)
 
@@ -194,10 +194,13 @@ typeInterraction.onchange = function() {
 			}
 			else {
 				console.log("Select END")
+				console.log(e)
 				//mise à jour des attributs
 				e.deselected[0].values_.id = document.getElementById('idValue').value
 				e.deselected[0].values_.name=document.getElementById('nameValue').value
 				e.deselected[0].values_.category=document.getElementById('catValue').value
+				console.log(document.getElementById('idValue').value)
+				console.log(e)
 			} 
 
 		})
@@ -236,16 +239,17 @@ function exportGeoJson() {
 	});
 
 }
-
+/*
 //A chaque click sur la carte on exporte la donnée (ou mettre un bouton save)
 map.on("singleclick", function(evt){
 	console.log("EXPORT")
 	exportGeoJson()
 })
-
+*/
 // Permettre la suppression des points sélectionnés
 document.addEventListener('keydown', function (e){
 	console.log(e)
+	//if(e.key == "Delete" && (e.key == "ShiftLeft" || e.key == "ShiftRight")) {
 	if(e.key == "Delete") {
 		//on enleve le comportement par default du navigateur
 		e.preventDefault();
@@ -258,3 +262,14 @@ document.addEventListener('keydown', function (e){
 	}
 })
 
+document.getElementById("saveButton").onclick = function() {
+	map.removeInteraction(draw)
+	map.removeInteraction(select)
+	map.removeInteraction(modify)
+
+	typeInterraction.value = "-"
+	exportGeoJson()
+
+
+
+};
