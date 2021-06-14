@@ -22,9 +22,15 @@
 				<option value="addPoint">Add Point</option>
 				<option value="modify">Modify</option>
 			</select>
+			<label>Id</label>
 			<input type="text" id="idValue" name="id" value="id">
 			<input type="text" id="nameValue"name="name" value="name">
-			<input type="text" name="categorie" id="catValue" value="catégorie">
+			<select id="catValue">
+				<option value="Ville" selected>Ville</option>
+				<option value="Village">Village</option>
+				<option value="Capitale">Capitale</option>
+			</select>
+			<!--<input type="text" name="categorie" id="catValue" value="catégorie">-->
 			<button id="saveButton">SAVE</button>
 			<div id="demo"></div>
 			<!--<button onclick="getPoiFeatures()">click me</button>-->

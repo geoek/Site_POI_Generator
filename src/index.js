@@ -80,13 +80,52 @@ var testLayer = new LayerVector({
 map.addLayer(testLayer)
 
 
+let styleCatVille = new Style({
+	image: new Circle({
+		radius: 7,
+		fill: new Fill({
+			color: '#3399CC',
+		}),
+		stroke: new Stroke({
+			color: '#fff',
+			width: 0.5,
+		})
+	})
+})
+
+let styleCatCapitale = new Style({
+	image: new Circle({
+		radius: 7,
+		fill: new Fill({
+			color: '#FF0000',
+		}),
+		stroke: new Stroke({
+			color: '#fff',
+			width: 0.5,
+		})
+	})
+})
+
+let styleCatVillage = new Style({
+	image: new Circle({
+		radius: 7,
+		fill: new Fill({
+			color: '#00BB55',
+		}),
+		stroke: new Stroke({
+			color: '#fff',
+			width: 0.5,
+		})
+	})
+})
+
 var localGeoLayer = new LayerVector({
 	title: "My json",
 	source: new SourceVector({
 		url: 'data/mygeojson.geojson',
 		format: new GeoJSON(),
 	}),
-	style: new Style({
+/*	style: new Style({
 		image: new Circle({
 			radius: 7,
 			fill: new Fill({
@@ -98,6 +137,20 @@ var localGeoLayer = new LayerVector({
 			}),
 		}),
 	})
+*/
+	style: function(feature, resolution) {
+		if (feature.getProperties().category === 'Ville') {
+			// create styles...
+			return styleCatVille
+		}
+		else if (feature.getProperties().category === 'Capitale') {
+			// create styles...
+			return styleCatCapitale
+		}
+		else{
+			return styleCatVillage
+		}
+	}
 });
 
 map.addLayer(localGeoLayer)
