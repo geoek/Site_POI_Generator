@@ -394,4 +394,25 @@ let updateListCat = function() {
 			alert(newCat + " existe déjà !")
 		}
 	}
+
+	updateSelectCat()
+}
+
+
+window.onload = function() {
+	updateSelectCat()
+}
+
+
+function updateSelectCat() {
+	let tmpHtml = ""
+
+	for (var i = 0; i < listCat.length; i++) {
+		var opt = listCat[i]
+		if (opt != undefined) {
+			tmpHtml += '<option value="' + opt + '">' + opt + '</option>'
+		}
+	}
+	document.getElementById("catValue").innerHTML = tmpHtml
+
 }		
