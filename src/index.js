@@ -16,6 +16,7 @@ import $ from 'jquery'
 import ScaleLine from 'ol/control/ScaleLine'
 import {defaults as defaultControls} from 'ol/control'
 
+let listCat = ["Ville",'Capitale','Village']
 
 let baselayers = new Group({
 	'title': 'Base Maps',
@@ -322,7 +323,75 @@ document.getElementById("saveButton").onclick = function() {
 
 	typeInterraction.value = "-"
 	exportGeoJson()
-
-
-
 };
+
+///////////////////////////////////////////////////
+///             Gestion Catégories              ///
+///////////////////////////////////////////////////
+
+// Affichage barre gestion
+document.getElementById("editCatButton").onclick = function() {
+	if (document.getElementById("listCat").style.display == 'none') {
+		document.getElementById("listCat").style.display = "block"
+		updateListCat()
+	} else {
+		document.getElementById("listCat").style.display = "none"
+	}
+}
+
+// Creation de la liste de gestion des cat	
+let updateListCat = function() {
+	document.getElementById("listCat").innerHTML = "<ul>"
+	for (let cat in listCat) {
+		document.getElementById("listCat").innerHTML += "<li class='listeCat'>" + listCat[cat] + "</li>"
+		//ajout d'un bouton de suppression de la cat
+		let inputElement = document.createElement('button')
+		inputElement.innerText = "-"
+		inputElement.setAttribute("class", "deleteCat")
+		inputElement.setAttribute("id", "btn"+listCat[cat])
+		document.getElementById("listCat").innerHTML += inputElement.outerHTML
+
+	}
+
+	// Champ de nouvelle cat
+	document.getElementById("listCat").innerHTML += "<label>&nbsp Nouvelle Catégorie : &nbsp</label>"
+	document.getElementById("listCat").innerHTML += '<input type="text" id="newCat" name="newCat">'
+	document.getElementById("listCat").innerHTML += "</ul>"
+
+	// bouton de nouvelle cat
+	let addButton = document.createElement('button')
+	addButton.innerText = "+"
+	addButton.setAttribute("id", "addCatBtn")
+	document.getElementById("listCat").innerHTML += addButton.outerHTML
+
+	document.getElementById("listCat").innerHTML += "</ul>"
+
+	// creation des actions des boutons de suppression de cat
+	for (let i in document.getElementsByClassName('deleteCat') ) {
+		let id = document.getElementsByClassName('deleteCat')[i].id
+		if ( id != undefined) {
+			console.log(id)
+			document.getElementById(id).onclick = function() {
+				for(var j = 0 ; j < listCat.length; j++) {
+					if(listCat[j] == id.substr(3)) {
+						delete listCat[j]
+					}
+				}
+				updateListCat()
+			}
+		}
+
+	}
+
+	// action d'ajout de cat
+	document.getElementById("addCatBtn").onclick = function() {
+		let newCat = document.getElementById("newCat").value
+		console.log(listCat.indexOf(newCat))
+		if (listCat.indexOf(newCat) < 0) {
+			listCat.push(newCat)
+			updateListCat()
+		} else {
+			alert(newCat + " existe déjà !")
+		}
+	}
+}		
