@@ -16,8 +16,7 @@ import $ from 'jquery'
 import ScaleLine from 'ol/control/ScaleLine'
 import {defaults as defaultControls} from 'ol/control'
 import { createProjection } from 'ol/proj'
-
-let listCat = ["-", "Ville",'Capitale','Village']
+import {listCatInitialisation} from './category.js'
 
 let baselayers = new Group({
 	'title': 'Base Maps',
@@ -330,99 +329,7 @@ document.getElementById("saveButton").onclick = function() {
 	exportGeoJson()
 };
 
-///////////////////////////////////////////////////
-///             Gestion Catégories              ///
-///////////////////////////////////////////////////
-
-// Affichage barre gestion
-document.getElementById("editCatButton").onclick = function() {
-	if (document.getElementById("listCat").style.display == 'none') {
-		document.getElementById("listCat").style.display = "block"
-		updateListCat()
-	} else {
-		document.getElementById("listCat").style.display = "none"
-	}
-}
-
-// Creation de la liste de gestion des cat	
-let updateListCat = function() {
-	document.getElementById("listCat").innerHTML = "<ul>"
-	for (let cat in listCat) {
-		// on ne veut pas afficher la catégorie par défault (-) car non supprimable
-		if (listCat[cat] != '-') {
-			let htmlToAdd = "<span class='groupCat'> <li class='listeCat'>" + listCat[cat] + "</li>"
-			//ajout d'un bouton de suppression de la cat
-			let inputElement = document.createElement('button')
-			inputElement.innerText = "-"
-			inputElement.setAttribute("class", "deleteCat btn btn-danger")
-			inputElement.setAttribute("id", "btn"+listCat[cat])
-			htmlToAdd += inputElement.outerHTML
-			htmlToAdd += "</span>" 
-			document.getElementById("listCat").innerHTML += htmlToAdd
-		}
-	}
-
-	// Champ de nouvelle cat
-	document.getElementById("listCat").innerHTML += "<label>&nbsp Nouvelle Catégorie : &nbsp</label>"
-	document.getElementById("listCat").innerHTML += '<input type="text" id="newCat" name="newCat">'
-	document.getElementById("listCat").innerHTML += "</ul>"
-
-	// bouton de nouvelle cat
-	let addButton = document.createElement('button')
-	addButton.innerText = "+"
-	addButton.setAttribute("id", "addCatBtn")
-	addButton.setAttribute("class", "btn btn-primary")
-	document.getElementById("listCat").innerHTML += addButton.outerHTML
-
-	document.getElementById("listCat").innerHTML += "</ul>"
-
-	// creation des actions des boutons de suppression de cat
-	for (let i in document.getElementsByClassName('deleteCat') ) {
-		let id = document.getElementsByClassName('deleteCat')[i].id
-		if ( id != undefined) {
-			console.log(id)
-			document.getElementById(id).onclick = function() {
-				for(var j = 0 ; j < listCat.length; j++) {
-					if(listCat[j] == id.substr(3)) {
-						delete listCat[j]
-					}
-				}
-				updateListCat()
-			}
-		}
-
-	}
-
-	// action d'ajout de cat
-	document.getElementById("addCatBtn").onclick = function() {
-		let newCat = document.getElementById("newCat").value
-		console.log(listCat.indexOf(newCat))
-		if (listCat.indexOf(newCat) < 0 && newCat != '') {
-			listCat.push(newCat)
-			updateListCat()
-		} else {
-			alert(newCat + " Vide ou existe déjà !")
-		}
-	}
-
-	updateSelectCat()
-}
-
 
 window.onload = function() {
-	updateSelectCat()
+	listCatInitialisation()
 }
-
-
-function updateSelectCat() {
-	let tmpHtml = ""
-
-	for (var i = 0; i < listCat.length; i++) {
-		var opt = listCat[i]
-		if (opt != undefined) {
-			tmpHtml += '<option value="' + opt + '">' + opt + '</option>'
-		}
-	}
-	document.getElementById("catValue").innerHTML = tmpHtml
-
-}		

@@ -14,6 +14,7 @@
 #map {
   width: 100%;
   height: 600px;
+  margin-top: 5px;
 }
 
 .groupCat {
@@ -30,7 +31,13 @@
   background: transparent;
 }
 
-.listeCat{
+#editCatBar{
+  background-color: "#FF0";
+  transition-duration: 0.5s;
+  height: 0px;
+}
+
+.elementCat{
   display : inline;
   //border : 1px solid black;
   padding: 1px 5px;
