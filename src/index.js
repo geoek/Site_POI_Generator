@@ -15,8 +15,9 @@ import LayerSwitcher from 'ol-layerswitcher'
 import $ from 'jquery'
 import ScaleLine from 'ol/control/ScaleLine'
 import {defaults as defaultControls} from 'ol/control'
+import { createProjection } from 'ol/proj'
 
-let listCat = ["Ville",'Capitale','Village']
+let listCat = ["-", "Ville",'Capitale','Village']
 
 let baselayers = new Group({
 	'title': 'Base Maps',
@@ -212,6 +213,10 @@ typeInterraction.onchange = function() {
 	map.removeInteraction(modify)
 
 	if (typeInterraction.value == 'addPoint') {
+		document.getElementById('idValue').value = ''
+		document.getElementById('nameValue').value = ''
+		document.getElementById('catValue').value = ''
+
 		let tempSource = localGeoLayer.getSource()
 		let idValue = document.getElementById('typeValue')
 		draw = new Draw({
@@ -343,14 +348,18 @@ document.getElementById("editCatButton").onclick = function() {
 let updateListCat = function() {
 	document.getElementById("listCat").innerHTML = "<ul>"
 	for (let cat in listCat) {
-		document.getElementById("listCat").innerHTML += "<li class='listeCat'>" + listCat[cat] + "</li>"
-		//ajout d'un bouton de suppression de la cat
-		let inputElement = document.createElement('button')
-		inputElement.innerText = "-"
-		inputElement.setAttribute("class", "deleteCat")
-		inputElement.setAttribute("id", "btn"+listCat[cat])
-		document.getElementById("listCat").innerHTML += inputElement.outerHTML
-
+		// on ne veut pas afficher la catégorie par défault (-) car non supprimable
+		if (listCat[cat] != '-') {
+			let htmlToAdd = "<span class='groupCat'> <li class='listeCat'>" + listCat[cat] + "</li>"
+			//ajout d'un bouton de suppression de la cat
+			let inputElement = document.createElement('button')
+			inputElement.innerText = "-"
+			inputElement.setAttribute("class", "deleteCat btn btn-danger")
+			inputElement.setAttribute("id", "btn"+listCat[cat])
+			htmlToAdd += inputElement.outerHTML
+			htmlToAdd += "</span>" 
+			document.getElementById("listCat").innerHTML += htmlToAdd
+		}
 	}
 
 	// Champ de nouvelle cat
@@ -362,6 +371,7 @@ let updateListCat = function() {
 	let addButton = document.createElement('button')
 	addButton.innerText = "+"
 	addButton.setAttribute("id", "addCatBtn")
+	addButton.setAttribute("class", "btn btn-primary")
 	document.getElementById("listCat").innerHTML += addButton.outerHTML
 
 	document.getElementById("listCat").innerHTML += "</ul>"
@@ -387,11 +397,11 @@ let updateListCat = function() {
 	document.getElementById("addCatBtn").onclick = function() {
 		let newCat = document.getElementById("newCat").value
 		console.log(listCat.indexOf(newCat))
-		if (listCat.indexOf(newCat) < 0) {
+		if (listCat.indexOf(newCat) < 0 && newCat != '') {
 			listCat.push(newCat)
 			updateListCat()
 		} else {
-			alert(newCat + " existe déjà !")
+			alert(newCat + " Vide ou existe déjà !")
 		}
 	}
 

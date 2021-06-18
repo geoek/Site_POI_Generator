@@ -16,11 +16,88 @@
   height: 600px;
 }
 
+.groupCat {
+  border : 1px solid black;
+  margin: 5px 10px;
+  padding: 3px 0px;
+  border-radius: 40px;
+  font-family: Raleway-SemiBold;
+  font-size: 15px;
+  color: rgba(58, 133, 191, 0.75);
+  letter-spacing: 1px;
+  line-height: 15px;
+  border: 2px solid rgba(58, 133, 191, 0.75);
+  background: transparent;
+}
+
 .listeCat{
   display : inline;
-  border : 1px solid black;
-  padding: 1px 10px;
+  //border : 1px solid black;
+  padding: 1px 5px;
   margin-left: 20px;
-  margin-right: 5px;
+  margin-right: 0px;
   
+}
+
+.btn {
+  margin-left: 5px;
+  margin-right: 10px;
+  padding: 5px;
+  font-weight: bold;
+}
+
+
+.btn-primary {
+  font-family: Raleway-SemiBold;
+  font-size: 15px;
+  color: rgba(58, 133, 191, 0.75);
+  letter-spacing: 1px;
+  line-height: 5px;
+  border: 2px solid rgba(58, 133, 191, 0.75);
+  border-radius: 40px;
+  background: transparent;
+  transition: all 0.5s ease 0s;
+}
+
+.btn-primary:hover {
+  color: #FFF;
+  background: rgba(58, 133, 191, 0.75);
+  border: 2px solid rgba(58, 133, 191, 0.75);
+}
+
+.btn-danger {
+  font-family: Raleway-SemiBold;
+  font-size: 15px;
+  color: rgba(217, 83, 78, 0.75);
+  letter-spacing: 1px;
+  line-height: 5px;
+  border: 2px solid rgba(217, 83, 78, 0.75);
+  border-radius: 50px;
+  background: transparent;
+  transition: all 0.5s ease 0s;
+}
+
+.btn-danger:hover {
+  color: #FFF;
+  background: rgba(217, 83, 78, 0.75);
+  border: 2px solid rgba(217, 83, 78, 0.75);
+}
+
+
+.btn-success {
+  font-family: Raleway-SemiBold;
+  font-size: 20px;
+  color: rgba(103, 192, 103, 0.75);
+  letter-spacing: 1px;
+  line-height: 5px;
+  border: 2px solid rgba(103, 192, 103, 0.75);
+  border-radius: 40px;
+  background: transparent;
+  transition: all 0.5s ease 0s;
+}
+
+.btn-success:hover {
+  color: #FFF;
+  background: rgb(103, 192, 103, 0.75);
+  border: 2px solid rgb(103, 192, 103, 0.75);
 }

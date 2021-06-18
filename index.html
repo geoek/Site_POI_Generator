@@ -17,28 +17,35 @@
 				</div>
 			</div>
 
-			<select id="typeAction">
-				<option value="none"> - </selectionner></option>
-				<option value="addPoint">Add Point</option>
-				<option value="modify">Modify</option>
-			</select>
-			<label>&nbsp Id</label>
-			<input type="text" id="idValue" name="id" value="id">
-			<label>&nbsp Name</label>
-			<input type="text" id="nameValue"name="name" value="name">
-			<label>&nbsp  Catégorie</label>
-			<select id="catValue">
+			<div id="actionBar">
+				<select id="typeAction">
+					<option value="none"> - </selectionner></option>
+					<option value="addPoint">Add Point</option>
+					<option value="modify">Modify</option>
+				</select>
+				<label>&nbsp Id</label>
+				<input type="text" id="idValue" name="id" value="">
+				<label>&nbsp Name</label>
+				<input type="text" id="nameValue"name="name" value="">
+				<label>&nbsp  Catégorie</label>
+				<select id="catValue">
 <!--				<option value="Ville" selected>Ville</option>
 				<option value="Village">Village</option>
 				<option value="Capitale">Capitale</option>
 -->
-			</select>
-			<!--<input type="text" name="categorie" id="catValue" value="catégorie">-->
-			<button id="editCatButton"> + </button>
-			<label>&nbsp</label>
-			<button id="saveButton">SAVE</button>
-			<div id="listCat" style='display:none'></div>
-			<!--<button onclick="getPoiFeatures()">click me</button>-->
+				</select>
+				<!--<input type="text" name="categorie" id="catValue" value="catégorie">-->
+				<button id="editCatButton" class="btn btn-success"> <b>+</b> </button>
+				<label>&nbsp</label>
+				<button id="saveButton">SAVE</button>
+			</div>
+
+			<div id="editCatBar">
+				<div id="listCat" style='display:none'></div>
+				<!--<button onclick="getPoiFeatures()">click me</button>-->
+			</div>
+			
+			
 			<div class="row">
 				<!-- MAP -->
 				<div class="col-12" id="map"></div>
