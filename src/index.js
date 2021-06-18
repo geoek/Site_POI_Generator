@@ -214,7 +214,7 @@ typeInterraction.onchange = function() {
 	if (typeInterraction.value == 'addPoint') {
 		document.getElementById('idValue').value = ''
 		document.getElementById('nameValue').value = ''
-		document.getElementById('catValue').value = ''
+		document.getElementById('catValue').value = '-'
 
 		let tempSource = localGeoLayer.getSource()
 		let idValue = document.getElementById('typeValue')
@@ -228,13 +228,22 @@ typeInterraction.onchange = function() {
 		tempSource.addFeatures(draw)
 
 		//Ajout des attributs
-		draw.on('drawend', function (e) {
-			console.log(localGeoLayer.getSource().getFeatures())
-			e.feature.setProperties({
-				'id': document.getElementById('idValue').value,
-				'name': document.getElementById('nameValue').value,
-				'category': document.getElementById('catValue').value
-			  })
+		draw.on('drawstart', function (e) {
+			// Vérificatioin que les attributs ont été renseignés
+			if (document.getElementById('idValue').value == '' || 
+			document.getElementById('nameValue').value == '' || 
+			document.getElementById('catValue').value == '-') {
+				draw.abortDrawing()
+				alert('Renseignez les propriétées')
+			} else {
+				// on enregistre les propriétés
+				e.feature.setProperties({
+					'id': document.getElementById('idValue').value,
+					'name': document.getElementById('nameValue').value,
+					'category': document.getElementById('catValue').value
+				})
+			}
+
 		});
 
 	}
