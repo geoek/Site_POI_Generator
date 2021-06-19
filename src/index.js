@@ -354,3 +354,11 @@ document.getElementById("closeAlertBtn").onclick = function() {
 window.onload = function() {
 	listCatInitialisation()
 }
+
+
+
+
+document.getElementById("storyBoardBtn").onclick = function() {
+	document.getElementById('map').classList.remove("col-12");
+	document.getElementById('map').classList.add("col-8");
+};
