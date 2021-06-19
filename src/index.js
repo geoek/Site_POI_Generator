@@ -21,6 +21,7 @@ import ScaleLine from 'ol/control/ScaleLine'
 import {defaults as defaultControls} from 'ol/control'
 import { createProjection } from 'ol/proj'
 import {listCatInitialisation} from './category.js'
+import './category.js'
 
 
 
@@ -356,9 +357,46 @@ window.onload = function() {
 }
 
 
+///////////////////////////////////////////////////////////
+/////////               STORY               ///////////////
+///////////////////////////////////////////////////////////
+
+function createStoryBoard() {
+	// Chargement du fichier Json
+	var requestURL = './data/mygeojson.geojson'
+	var request = new XMLHttpRequest()
+	request.open('GET', requestURL)
+	request.responseType = 'json'
+	request.send()
+
+	// On parse le Json pour créer la liste de catégories
+	request.onload = function() {
+		var jsonData = request.response;
+		console.log(jsonData)
+
+		let htmlStory = '<h1> Story </h1>'
+		for (let feat in jsonData.features) {
+			let name = jsonData.features[feat].properties.name			
+			let cat = jsonData.features[feat].properties.category
+			htmlStory += '<h2>'+ name +'</h2>'
+			htmlStory += '<p>'+ cat +'</p>'
+			htmlStory += '<hr>'	
+		}
+		document.getElementById('story').innerHTML = htmlStory
+	}
+}
 
 
 document.getElementById("storyBoardBtn").onclick = function() {
-	document.getElementById('map').classList.remove("col-12");
-	document.getElementById('map').classList.add("col-8");
-};
+	if (document.getElementById('map').classList.contains('col-12')) {
+		// Activation du panel
+		document.getElementById('map').classList.remove("col-12")
+		document.getElementById('map').classList.add("col-8")
+		createStoryBoard()
+	} else {
+		// Suppression panel
+		document.getElementById('map').classList.remove("col-8")
+		document.getElementById('map').classList.add("col-12")
+		document.getElementById('story').innerHTML = ''
+	}
+}
