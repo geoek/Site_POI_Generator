@@ -1,3 +1,7 @@
+
+// Or import only needed plugins
+import '../node_modules/bootstrap/js/dist/*.js';
+
 import 'ol/ol.css'
 import 'ol-layerswitcher/dist/ol-layerswitcher.css'
 import {Map, View,Feature,Overlay} from 'ol'
@@ -17,6 +21,8 @@ import ScaleLine from 'ol/control/ScaleLine'
 import {defaults as defaultControls} from 'ol/control'
 import { createProjection } from 'ol/proj'
 import {listCatInitialisation} from './category.js'
+
+
 
 let baselayers = new Group({
 	'title': 'Base Maps',
@@ -234,7 +240,8 @@ typeInterraction.onchange = function() {
 			document.getElementById('nameValue').value == '' || 
 			document.getElementById('catValue').value == '-') {
 				draw.abortDrawing()
-				alert('Renseignez les propriétées')
+				document.getElementById('alertText').innerText = "Renseignez les propriétées"
+				document.getElementById('alertBar').style.display = "block"
 			} else {
 				// on enregistre les propriétés
 				e.feature.setProperties({
@@ -336,6 +343,11 @@ document.getElementById("saveButton").onclick = function() {
 
 	typeInterraction.value = "-"
 	exportGeoJson()
+};
+
+document.getElementById("closeAlertBtn").onclick = function() {
+	document.getElementById('alertText').innerText = ''
+	document.getElementById('alertBar').style.display = "none"
 };
 
 
