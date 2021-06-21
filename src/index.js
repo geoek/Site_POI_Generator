@@ -380,6 +380,7 @@ function createStoryBoard() {
 			let cat = jsonData.features[feat].properties.category
 			htmlStory += '<h2>'+ name +'</h2>'
 			htmlStory += '<p>'+ cat +'</p>'
+			htmlStory += '<img class="fit-picture" src="./data/img/lapin.jpeg" alt="Lapin">'
 			htmlStory += '<hr>'	
 		}
 		document.getElementById('story').innerHTML = htmlStory
@@ -392,6 +393,7 @@ document.getElementById("storyBoardBtn").onclick = function() {
 		// Activation du panel
 		document.getElementById('map').classList.remove("col-12")
 		document.getElementById('map').classList.add("col-8")
+		document.getElementById('story').style.display = "block"
 		createStoryBoard()
 	} else {
 		// Suppression panel
