@@ -370,6 +370,8 @@ function createStoryBoard() {
 	request.send()
 
 	// On parse le Json pour créer la liste de catégories
+/*
+////////////VERSION VERTICALE/////////////////////////////
 	request.onload = function() {
 		var jsonData = request.response;
 		console.log(jsonData)
@@ -385,6 +387,170 @@ function createStoryBoard() {
 		}
 		document.getElementById('story').innerHTML = htmlStory
 	}
+*/
+	
+// VERSION HORIZONTALE ////////////////////
+
+	function displayOnglet(currentOnglet,jsonData) {
+		let name = jsonData.features[currentOnglet].properties.name			
+		let cat = jsonData.features[currentOnglet].properties.category
+		console.log(name + ' ' + cat)
+		let htmlOnglet = '<div class="contentOnglets hideOnglets" data-anim="' + name + '" style="opacity:0.5">'
+		htmlOnglet += '<h2>'+ name +'</h2>'
+		htmlOnglet += '<hr>'
+		htmlOnglet += '<p>'+ cat +'</p>'
+		htmlOnglet += '<img class="fit-picture" src="./data/img/lapin.jpeg" alt="Lapin">'
+		htmlOnglet += '<hr>'
+		htmlOnglet += '</div>'
+		
+		document.getElementById('contenuOnglet').innerHTML = htmlOnglet
+	}
+
+
+	request.onload = function() {
+		var jsonData = request.response
+		var currentOnglet = 0
+		console.log(jsonData)
+/*
+		let htmlStory = `
+		<div class="titleOnglets">
+			<div class="onglet active" data-anim="Paris">
+				Paris
+			</div>
+			<div class="onglet" data-anim="Londres">
+				Londres
+			</div>
+			<div class="onglet" data-anim="Brest">
+				Brest
+			</div>
+		</div>
+		<div class="contentOnglets" id="contenuOnglet">
+		</div>
+		`
+		for (let feat in jsonData.features) {
+			let name = jsonData.features[feat].properties.name			
+			let cat = jsonData.features[feat].properties.category
+			htmlStory += '<div class="contentOnglets hideOnglets" data-anim="' + name + '" style="opacity:0.5">'
+			htmlStory += '<h2>'+ name +'</h2>'
+			htmlStory += '<hr>'
+			htmlStory += '<p>'+ cat +'</p>'
+			htmlStory += '<img class="fit-picture" src="./data/img/lapin.jpeg" alt="Lapin">'
+			htmlStory += '<hr>'
+			htmlStory += '</div>'
+		}
+*/
+		let htmlStory = `
+			<label> Prev </label>
+			<button id="prevButton" class="btn btn-success"> <b>-</b> </button>
+			<label> Next </label>
+			<button id="nextButton" class="btn btn-success"> <b>+</b> </button>
+			<div class="contentOnglets" id="contenuOnglet">
+			</div>
+		`
+
+		document.getElementById('story').innerHTML = htmlStory
+
+		document.getElementById('nextButton').addEventListener('click', () => {
+			if (currentOnglet < jsonData.features.length -1) {
+				currentOnglet += 1
+			}
+
+			console.log('currentOnglet ' + currentOnglet)
+			displayOnglet(currentOnglet,jsonData)
+		})
+		document.getElementById('prevButton').addEventListener('click', () => {
+			if (currentOnglet > 0) {
+				currentOnglet -= 1
+			}
+			console.log('currentOnglet ' + currentOnglet)
+			displayOnglet(currentOnglet,jsonData)
+		})
+
+/*		
+		document.getElementById("Paris-tab").onclick = function() {
+			document.getElementById('Paris').classList.add('active')
+		}
+		document.getElementById("Londres-tab").onclick = function() {
+			document.getElementById('Londres').classList.add('active')
+		}
+		document.getElementById("Brest-tab").onclick = function() {
+			document.getElementById('Brest').classList.add('active')
+		}
+*/
+
+		//const onglets = document.querySelectorAll('.onglet')
+		//const ongletsContenu = document.querySelectorAll('.contentOnglets')
+
+		//console.log(ongletsContenu)
+/*		
+		let index = 0
+
+		onglets.forEach(onglet => {
+			onglet.addEventListener('click', () => {
+				if (onglet.classList.contains('active')) {
+					return
+				} else {
+					onglet.classList.add('active')
+				}
+
+				index = onglet.getAttribute('data-anim')
+
+				for (let i=0; i<onglets.length; i++) {
+					if (onglets[i].getAttribute('data-anim') != index) {
+						onglets[i].classList.remove('active')
+					}
+					else {
+						console.log('TROUVEEEE ' + index + ' ' + i)
+
+						let name = jsonData.features[i].properties.name			
+						let cat = jsonData.features[i].properties.category
+
+						console.log(name + ' ' + cat)
+						let htmlOnglet = '<div class="contentOnglets hideOnglets" data-anim="' + name + '" style="opacity:0.5">'
+						htmlOnglet += '<h2>'+ name +'</h2>'
+						htmlOnglet += '<hr>'
+						htmlOnglet += '<p>'+ cat +'</p>'
+						htmlOnglet += '<img class="fit-picture" src="./data/img/lapin.jpeg" alt="Lapin">'
+						htmlOnglet += '<hr>'
+						htmlOnglet += '</div>'
+						
+						document.getElementById('contenuOnglet').innerHTML = htmlOnglet
+					}
+				}
+				*/
+/*
+				for (let j=0; j<ongletsContenu.length; j++) {
+					console.log(j)
+					if (ongletsContenu[j].getAttribute('data-anim') == index) {
+						console.log('TROUVEEEE')
+
+						let name = jsonData.features[j].properties.name			
+						let cat = jsonData.features[j].properties.category
+						htmlOnglet += '<div class="contentOnglets hideOnglets" data-anim="' + name + '" style="opacity:0.5">'
+						htmlOnglet += '<h2>'+ name +'</h2>'
+						htmlOnglet += '<hr>'
+						htmlOnglet += '<p>'+ cat +'</p>'
+						htmlOnglet += '<img class="fit-picture" src="./data/img/lapin.jpeg" alt="Lapin">'
+						htmlOnglet += '<hr>'
+						htmlOnglet += '</div>'
+						
+						document.getElementById('contenuOnglet').innerHTML = htmlOnglet
+
+						//ongletsContenu[j].classList.add('activeContenu')
+						//ongletsContenu[j].classList.remove('hideOnglets')
+						//ongletsContenu[j].style.opacity = 1
+					} else {
+						//ongletsContenu[j].classList.remove('activeContenu')
+						//ongletsContenu[j].classList.add('hideOnglets')
+						//ongletsContenu[j].style.opacity = 1
+					}
+				}*/
+/*					
+			})
+		})
+	*/
+	}
+
 }
 
 
