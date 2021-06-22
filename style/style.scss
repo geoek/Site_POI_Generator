@@ -153,60 +153,11 @@ body {
 
 
 
-.titleOnglets{
-  width: 100%;
-  display: flex;
-  border-bottom: 1px solid #333;
-}
-
-.onglet{
-  width: 200px;
-  display: flex;  
-  justify-content: center;
-  align-items: center;
-  font-size: 22px;
-  font-weight: 700;
-  cursor: pointer;
-
-}
 /*
 .onglets:not(:nth-child(3)) {
   border-right: 1px solid#333;
 }
 */
-.contentOnglets {
-  position: absolute;
-  width:300px;
-}
-
-.hideOnglets{
-  opacity:0.5;
-}
-
-.active {
-  background: midnightblue;
-  color:#F1F1F1;
-  transition: all 0.3s ease;
-}
-
-.activeContenu {
-  color:#F00;
-  opacity:1;
-}
-
-
-
-.contentOnglets h2{
-  padding: 20px;
-}
-
-.contentOnglets p{
-  padding: 20px;
-}
-
-.contentOnglets img{
-  width: 100%;
-}
 
 .contentOnglets hr{
   width: 20%;

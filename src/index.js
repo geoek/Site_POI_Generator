@@ -394,8 +394,10 @@ function createStoryBoard() {
 	function displayOnglet(currentOnglet,jsonData) {
 		let name = jsonData.features[currentOnglet].properties.name			
 		let cat = jsonData.features[currentOnglet].properties.category
-		console.log(name + ' ' + cat)
-		let htmlOnglet = '<div class="contentOnglets hideOnglets" data-anim="' + name + '" style="opacity:0.5">'
+		let coord = jsonData.features[currentOnglet].geometry.coordinates
+		
+		console.log(name + ' ' + cat + ' ' + coord)
+		let htmlOnglet = '<div class="contentOnglets hideOnglets" data-anim="' + name + '">'
 		htmlOnglet += '<h2>'+ name +'</h2>'
 		htmlOnglet += '<hr>'
 		htmlOnglet += '<p>'+ cat +'</p>'
@@ -404,6 +406,41 @@ function createStoryBoard() {
 		htmlOnglet += '</div>'
 		
 		document.getElementById('contenuOnglet').innerHTML = htmlOnglet
+
+		//Zoom sur l'entité
+		const multipleVitesse = 1.5	// reglage de la vitesse de l'anim
+		const zoomEntite = 12		// zoom affichage de l'entité
+		const zoomDeplacement = 8	// dezoom level avant de se déplacer
+		
+		if (map.getView().getCenter() != coord) {
+			console.log(coord + '         ' + map.getView().getCenter())
+			if (map.getView().getZoom() > zoomDeplacement) {
+				map.getView().animate({
+					zoom: zoomDeplacement,
+					duration: 1000*multipleVitesse
+				})
+			}
+			setTimeout(() => {
+				map.getView().animate({
+					center: coord,
+					duration: 1000*multipleVitesse
+				})
+			}, 500*multipleVitesse);
+			setTimeout(() => {
+				map.getView().animate({
+					zoom: zoomEntite,
+					duration: 1000
+				})
+			}, 1000*multipleVitesse);
+		}
+
+/*
+		if (map.getView().getCenter() != coord) {
+			map.getView().animate({
+				center: coord,
+				duration: 1500
+			  })
+		}*/
 	}
 
 
@@ -440,16 +477,19 @@ function createStoryBoard() {
 		}
 */
 		let htmlStory = `
-			<label> Prev </label>
 			<button id="prevButton" class="btn btn-success"> <b>-</b> </button>
-			<label> Next </label>
 			<button id="nextButton" class="btn btn-success"> <b>+</b> </button>
 			<div class="contentOnglets" id="contenuOnglet">
+
 			</div>
 		`
-
+		// on rajoute les boutons dans l'UI
 		document.getElementById('story').innerHTML = htmlStory
 
+		// affichage du premier onglet
+		displayOnglet(currentOnglet,jsonData)
+
+		// action des boutons
 		document.getElementById('nextButton').addEventListener('click', () => {
 			if (currentOnglet < jsonData.features.length -1) {
 				currentOnglet += 1
