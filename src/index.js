@@ -358,7 +358,11 @@ window.onload = function() {
 
 
 ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 /////////               STORY               ///////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
 
 function createStoryBoard() {
@@ -433,14 +437,6 @@ function createStoryBoard() {
 				})
 			}, 1000*multipleVitesse);
 		}
-
-/*
-		if (map.getView().getCenter() != coord) {
-			map.getView().animate({
-				center: coord,
-				duration: 1500
-			  })
-		}*/
 	}
 
 
@@ -448,34 +444,7 @@ function createStoryBoard() {
 		var jsonData = request.response
 		var currentOnglet = 0
 		console.log(jsonData)
-/*
-		let htmlStory = `
-		<div class="titleOnglets">
-			<div class="onglet active" data-anim="Paris">
-				Paris
-			</div>
-			<div class="onglet" data-anim="Londres">
-				Londres
-			</div>
-			<div class="onglet" data-anim="Brest">
-				Brest
-			</div>
-		</div>
-		<div class="contentOnglets" id="contenuOnglet">
-		</div>
-		`
-		for (let feat in jsonData.features) {
-			let name = jsonData.features[feat].properties.name			
-			let cat = jsonData.features[feat].properties.category
-			htmlStory += '<div class="contentOnglets hideOnglets" data-anim="' + name + '" style="opacity:0.5">'
-			htmlStory += '<h2>'+ name +'</h2>'
-			htmlStory += '<hr>'
-			htmlStory += '<p>'+ cat +'</p>'
-			htmlStory += '<img class="fit-picture" src="./data/img/lapin.jpeg" alt="Lapin">'
-			htmlStory += '<hr>'
-			htmlStory += '</div>'
-		}
-*/
+
 		let htmlStory = `
 			<button id="prevButton" class="btn btn-success"> <b>-</b> </button>
 			<button id="nextButton" class="btn btn-success"> <b>+</b> </button>
@@ -505,90 +474,6 @@ function createStoryBoard() {
 			console.log('currentOnglet ' + currentOnglet)
 			displayOnglet(currentOnglet,jsonData)
 		})
-
-/*		
-		document.getElementById("Paris-tab").onclick = function() {
-			document.getElementById('Paris').classList.add('active')
-		}
-		document.getElementById("Londres-tab").onclick = function() {
-			document.getElementById('Londres').classList.add('active')
-		}
-		document.getElementById("Brest-tab").onclick = function() {
-			document.getElementById('Brest').classList.add('active')
-		}
-*/
-
-		//const onglets = document.querySelectorAll('.onglet')
-		//const ongletsContenu = document.querySelectorAll('.contentOnglets')
-
-		//console.log(ongletsContenu)
-/*		
-		let index = 0
-
-		onglets.forEach(onglet => {
-			onglet.addEventListener('click', () => {
-				if (onglet.classList.contains('active')) {
-					return
-				} else {
-					onglet.classList.add('active')
-				}
-
-				index = onglet.getAttribute('data-anim')
-
-				for (let i=0; i<onglets.length; i++) {
-					if (onglets[i].getAttribute('data-anim') != index) {
-						onglets[i].classList.remove('active')
-					}
-					else {
-						console.log('TROUVEEEE ' + index + ' ' + i)
-
-						let name = jsonData.features[i].properties.name			
-						let cat = jsonData.features[i].properties.category
-
-						console.log(name + ' ' + cat)
-						let htmlOnglet = '<div class="contentOnglets hideOnglets" data-anim="' + name + '" style="opacity:0.5">'
-						htmlOnglet += '<h2>'+ name +'</h2>'
-						htmlOnglet += '<hr>'
-						htmlOnglet += '<p>'+ cat +'</p>'
-						htmlOnglet += '<img class="fit-picture" src="./data/img/lapin.jpeg" alt="Lapin">'
-						htmlOnglet += '<hr>'
-						htmlOnglet += '</div>'
-						
-						document.getElementById('contenuOnglet').innerHTML = htmlOnglet
-					}
-				}
-				*/
-/*
-				for (let j=0; j<ongletsContenu.length; j++) {
-					console.log(j)
-					if (ongletsContenu[j].getAttribute('data-anim') == index) {
-						console.log('TROUVEEEE')
-
-						let name = jsonData.features[j].properties.name			
-						let cat = jsonData.features[j].properties.category
-						htmlOnglet += '<div class="contentOnglets hideOnglets" data-anim="' + name + '" style="opacity:0.5">'
-						htmlOnglet += '<h2>'+ name +'</h2>'
-						htmlOnglet += '<hr>'
-						htmlOnglet += '<p>'+ cat +'</p>'
-						htmlOnglet += '<img class="fit-picture" src="./data/img/lapin.jpeg" alt="Lapin">'
-						htmlOnglet += '<hr>'
-						htmlOnglet += '</div>'
-						
-						document.getElementById('contenuOnglet').innerHTML = htmlOnglet
-
-						//ongletsContenu[j].classList.add('activeContenu')
-						//ongletsContenu[j].classList.remove('hideOnglets')
-						//ongletsContenu[j].style.opacity = 1
-					} else {
-						//ongletsContenu[j].classList.remove('activeContenu')
-						//ongletsContenu[j].classList.add('hideOnglets')
-						//ongletsContenu[j].style.opacity = 1
-					}
-				}*/
-/*					
-			})
-		})
-	*/
 	}
 
 }
@@ -608,3 +493,52 @@ document.getElementById("storyBoardBtn").onclick = function() {
 		document.getElementById('story').innerHTML = ''
 	}
 }
+
+
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+//
+//             UPLOAD PHOTOS
+//
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+/*
+document.getElementById("uploadPhotoBtn").onclick = function() {
+    let photo = document.getElementById("photoFile").files[0]
+	console.log(photo)
+	let formData = new FormData()
+	formData.append('file', photo);
+
+	console.log("OK")
+	console.log(formData.get('file'))
+	var test = 'bonjour'
+
+	const options = {
+		method: 'POST',
+		body: formData
+	}
+	 
+	fetch('./uploadphoto/', options);
+*/
+	/*
+	//envoie du fichier eu serveur via node js
+	$.ajax({
+		url: "./uploadphoto/",
+		type: "POST", //send it through get method
+		data: { 
+			data: formData,
+		},
+		dataType: file,
+		success: function(data,response) {
+			console.log(response)
+			console.log(data)
+		},
+		error: function(xhr) {
+		  console.log('ko')
+		}
+	});
+    alert('The file has been uploaded successfully.');
+*/
+/*}*/

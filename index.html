@@ -40,8 +40,11 @@
 				<option value="Capitale">Capitale</option>
 -->
 				</select>
-				<label for="file">Photo</label>
-				<input type="file" id="photoFile" name="photoFile" accept="image/*" capture>
+				<form method="POST" action="/" enctype="multipart/form-data" style="display:inline;">
+					<label for="file">Photo</label>
+					<input type="file" id="photoFile" name="photoFile" accept="image/*">
+					<input type="submit" id="uploadPhotoBtn" value="Upload">
+				</form>
 				<!--<input type="text" name="categorie" id="catValue" value="catégorie">-->
 				<button id="editCatButton" class="btn btn-success"> <b>+</b> </button>
 				<label>&nbsp</label>
