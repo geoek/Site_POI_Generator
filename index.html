@@ -30,7 +30,7 @@
 					<option value="modify">Modify</option>
 				</select>
 				<label>&nbsp Id</label>
-				<input type="text" id="idValue" name="id" value="">
+				<input type="number" id="idValue"name="id" value="" readonly>
 				<label>&nbsp Name</label>
 				<input type="text" id="nameValue"name="name" value="">
 				<label>&nbsp  Catégorie</label>
@@ -40,11 +40,13 @@
 				<option value="Capitale">Capitale</option>
 -->
 				</select>
-				<!--<form method="POST" enctype="multipart/form-data" style="display:inline;">-->
+				
+				<span id="uploadModule" style="display: none;">	
 					<label for="file">Photo</label>
 					<input type="file" id="photoFile" name="photoFile" accept="image/*">
 					<input type="submit" id="uploadPhotoBtn" value="Upload">
-				<!--</form>-->
+				</span>
+				
 				<!--<input type="text" name="categorie" id="catValue" value="catégorie">-->
 				<button id="editCatButton" class="btn btn-success"> <b>+</b> </button>
 				<label>&nbsp</label>

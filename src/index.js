@@ -219,12 +219,22 @@ typeInterraction.onchange = function() {
 	map.removeInteraction(modify)
 
 	if (typeInterraction.value == 'addPoint') {
-		document.getElementById('idValue').value = ''
+		document.getElementById('uploadModule').style.display = "inline"
+
 		document.getElementById('nameValue').value = ''
 		document.getElementById('catValue').value = '-'
 
 		let tempSource = localGeoLayer.getSource()
-		let idValue = document.getElementById('typeValue')
+		let sizeJson = tempSource.getFeatures().length
+		let maxId = 0
+		for (let i = 0; i < sizeJson; i++) {
+			if (tempSource.getFeatures()[i].values_.id > maxId) {
+				maxId = tempSource.getFeatures()[i].values_.id
+			}
+		}
+		console.log(maxId)
+		document.getElementById('idValue').value = maxId
+
 		draw = new Draw({
 			source: tempSource,
 			type: ("Point")
@@ -237,8 +247,7 @@ typeInterraction.onchange = function() {
 		//Ajout des attributs
 		draw.on('drawstart', function (e) {
 			// Vérificatioin que les attributs ont été renseignés
-			if (document.getElementById('idValue').value == '' || 
-			document.getElementById('nameValue').value == '' || 
+			if (document.getElementById('nameValue').value == '' || 
 			document.getElementById('catValue').value == '-') {
 				draw.abortDrawing()
 				document.getElementById('alertText').innerText = "Renseignez les propriétées"
@@ -246,16 +255,24 @@ typeInterraction.onchange = function() {
 			} else {
 				// on enregistre les propriétés
 				e.feature.setProperties({
-					'id': document.getElementById('idValue').value,
+					'id': maxId + 1,
 					'name': document.getElementById('nameValue').value,
 					'category': document.getElementById('catValue').value
 				})
 			}
-
 		});
 
-	}
-	else if (typeInterraction.value == 'modify') {
+		//Apres avoir ajouté un point on quitte le mode ajout et on nettoie le formulaire
+		draw.on('drawend', function (e) {
+			map.removeInteraction(draw)
+			typeInterraction.value = "-"
+			document.getElementById('idValue').value = ''
+			document.getElementById('nameValue').value = ''
+			document.getElementById('catValue').value = '-'
+			document.getElementById('uploadModule').style.display = "none"
+		});
+	} else if (typeInterraction.value == 'modify') {
+		document.getElementById('uploadModule').style.display = "inline"
 		map.addInteraction(select)
 		map.addInteraction(modify)
 
@@ -271,14 +288,17 @@ typeInterraction.onchange = function() {
 				console.log("Select END")
 				console.log(e)
 				//mise à jour des attributs
-				e.deselected[0].values_.id = document.getElementById('idValue').value
 				e.deselected[0].values_.name=document.getElementById('nameValue').value
 				e.deselected[0].values_.category=document.getElementById('catValue').value
-				console.log(document.getElementById('idValue').value)
 				console.log(e)
+				document.getElementById('idValue').value = ''
+				document.getElementById('nameValue').value = ''
+				document.getElementById('catValue').value = '-'
 			} 
 
 		})
+	} else {
+		document.getElementById('uploadModule').style.display = "none"
 	}
 }
 
@@ -323,7 +343,6 @@ map.on("singleclick", function(evt){
 */
 // Permettre la suppression des points sélectionnés
 document.addEventListener('keydown', function (e){
-	console.log(e)
 	//if(e.key == "Delete" && (e.key == "ShiftLeft" || e.key == "ShiftRight")) {
 	if(e.key == "Delete") {
 		//on enleve le comportement par default du navigateur
@@ -396,16 +415,28 @@ function createStoryBoard() {
 // VERSION HORIZONTALE ////////////////////
 
 	function displayOnglet(currentOnglet,jsonData) {
+		let id = jsonData.features[currentOnglet].properties.id			
 		let name = jsonData.features[currentOnglet].properties.name			
 		let cat = jsonData.features[currentOnglet].properties.category
 		let coord = jsonData.features[currentOnglet].geometry.coordinates
 		
+/*		// on vérifie que l'image existe :
+		fetch('./data/img/id_'+ id +'.jpg', { method: 'HEAD' })
+			.then(res => {
+				if (res.ok) {
+					console.log('Image exists.');
+				} else {
+					console.log('Image does not exist.');
+				}
+			}).catch(err => console.log('Error:', err));
+
+*/
 		console.log(name + ' ' + cat + ' ' + coord)
 		let htmlOnglet = '<div class="contentOnglets hideOnglets" data-anim="' + name + '">'
 		htmlOnglet += '<h2>'+ name +'</h2>'
 		htmlOnglet += '<hr>'
 		htmlOnglet += '<p>'+ cat +'</p>'
-		htmlOnglet += '<img class="fit-picture" src="./data/img/lapin.jpeg" alt="Lapin">'
+		htmlOnglet += '<img class="fit-picture" src="./data/img/id_'+ id +'.jpg" alt="Lapin">'
 		htmlOnglet += '<hr>'
 		htmlOnglet += '</div>'
 		
@@ -511,16 +542,19 @@ document.getElementById("uploadPhotoBtn").onclick = function() {
 		let photo = document.getElementById("photoFile").files[0]
 		//on créé un objet pour envoyer les data au serveur
 		var formData = new FormData()
+
+		let filename = 'id_' + document.getElementById("idValue").value + '.jpg'
+
 		//on rempli l'objet
 		formData.append('photo', photo)
-		formData.append('name', 'bib.jpg') // A FAIRE : id automatique de chaque point
+		formData.append('name', filename) // A FAIRE : id automatique de chaque point
 
 		// requete pour le serveur (voir aussi $AJAX (jquery) ou fetch)
 		var request = new XMLHttpRequest();
 		request.open("POST", "./uploadphoto/");
 		request.send(formData);
 
-
+		alert("Upload OK")
 		// A FAIRE : Rajouter notif flottante qd upload ok
 	}
 }
