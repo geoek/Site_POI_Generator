@@ -504,41 +504,23 @@ document.getElementById("storyBoardBtn").onclick = function() {
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
-/*
+
 document.getElementById("uploadPhotoBtn").onclick = function() {
-    let photo = document.getElementById("photoFile").files[0]
-	console.log(photo)
-	let formData = new FormData()
-	formData.append('file', photo);
+	if (document.getElementById("photoFile").files[0] != undefined) {
+		// on recupere la photo selectionnée
+		let photo = document.getElementById("photoFile").files[0]
+		//on créé un objet pour envoyer les data au serveur
+		var formData = new FormData()
+		//on rempli l'objet
+		formData.append('photo', photo)
+		formData.append('name', 'bib.jpg') // A FAIRE : id automatique de chaque point
 
-	console.log("OK")
-	console.log(formData.get('file'))
-	var test = 'bonjour'
+		// requete pour le serveur (voir aussi $AJAX (jquery) ou fetch)
+		var request = new XMLHttpRequest();
+		request.open("POST", "./uploadphoto/");
+		request.send(formData);
 
-	const options = {
-		method: 'POST',
-		body: formData
+
+		// A FAIRE : Rajouter notif flottante qd upload ok
 	}
-	 
-	fetch('./uploadphoto/', options);
-*/
-	/*
-	//envoie du fichier eu serveur via node js
-	$.ajax({
-		url: "./uploadphoto/",
-		type: "POST", //send it through get method
-		data: { 
-			data: formData,
-		},
-		dataType: file,
-		success: function(data,response) {
-			console.log(response)
-			console.log(data)
-		},
-		error: function(xhr) {
-		  console.log('ko')
-		}
-	});
-    alert('The file has been uploaded successfully.');
-*/
-/*}*/
+}
