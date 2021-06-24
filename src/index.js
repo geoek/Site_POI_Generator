@@ -206,6 +206,20 @@ map.on('singleclick', function (event) {
 // Creation des interactions avec la carte                         //
 /////////////////////////////////////////////////////////////////////
 
+function displayEditPanel(order) {
+	if (order) {
+		// Activation du panel
+		document.getElementById('map').classList.remove("col-sm-12")
+		document.getElementById('map').classList.add("col-sm-8")
+		document.getElementById('editPanel').style.display = "block"
+	} else {
+		// Suppression panel
+		document.getElementById('map').classList.remove("col-sm-8")
+		document.getElementById('map').classList.add("col-sm-12")
+		document.getElementById('editPanel').innerHTML = ''
+	}
+}
+
 var typeInterraction = document.getElementById('typeAction')
 
 var draw
@@ -220,6 +234,7 @@ typeInterraction.onchange = function() {
 	map.removeInteraction(modify)
 
 	if (typeInterraction.value == 'addPoint') {
+		displayEditPanel(true)
 		document.getElementById('uploadModule').style.display = "inline"
 
 		document.getElementById('nameValue').value = ''
@@ -278,6 +293,8 @@ typeInterraction.onchange = function() {
 			// A FAIRE : notif flottante : Ajout point ok
 		});
 	} else if (typeInterraction.value == 'modify') {
+		displayEditPanel(true)
+
 		document.getElementById('uploadModule').style.display = "inline"
 		map.addInteraction(select)
 		map.addInteraction(modify)
@@ -305,6 +322,7 @@ typeInterraction.onchange = function() {
 
 		})
 	} else {
+		displayEditPanel(false)
 		document.getElementById('uploadModule').style.display = "none"
 	}
 }

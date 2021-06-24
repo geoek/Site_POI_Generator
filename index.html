@@ -23,44 +23,48 @@
 				<span id="alertText"></span>
 			</div>
 
-			<div id="actionBar">
-				<select id="typeAction">
-					<option value="none"> - </selectionner></option>
-					<option value="addPoint">Add Point</option>
-					<option value="modify">Modify</option>
-				</select>
-				<label>&nbsp Id</label>
-				<input type="number" id="idValue"name="id" value="" readonly>
-				<label>&nbsp Name</label>
-				<input type="text" id="nameValue"name="name" value="">
-				<label>&nbsp  Catégorie</label>
-				<select id="catValue">
-<!--				<option value="Ville" selected>Ville</option>
-				<option value="Village">Village</option>
-				<option value="Capitale">Capitale</option>
--->
-				</select>
-				
-				<span id="uploadModule" style="display: none;">	
-					<label for="file">Photo</label>
-					<input type="file" id="photoFile" name="photoFile" accept="image/*">
-					<input type="submit" id="uploadPhotoBtn" value="Upload">
-				</span>
-				
-				<!--<input type="text" name="categorie" id="catValue" value="catégorie">-->
-				<button id="editCatButton" class="btn btn-success"> <b>+</b> </button>
-				<label>&nbsp</label>
-				<button id="storyBoardBtn">Story</button>
-			</div>
+			<select id="typeAction">
+				<option value="none"> - </selectionner></option>
+				<option value="addPoint">Add Point</option>
+				<option value="modify">Modify</option>
+			</select>
+			
+			<label>&nbsp</label>
+			<button id="storyBoardBtn">Story</button>
 
-			<div id="editCatBar" style='height:0px;'>
-			</div>
-			
-			
 			<div class="row">
+
+				<div class="col-sm-4" id="editPanel" style="display: none;">
+					<label>&nbsp Id</label>
+					<input type="number" id="idValue" class="form-control col-2" placeholder="Id" value="" aria-label="Identifiant" aria-describedby="basic-addon1" readonly>
+					<label>&nbsp Name</label>
+					<input type="text" id="nameValue" class="form-control" placeholder="Name" value="" aria-label="Name" aria-describedby="basic-addon1">
+					<label>&nbsp  Catégorie</label>
+					<select id="catValue">
+	<!--				<option value="Ville" selected>Ville</option>
+					<option value="Village">Village</option>
+					<option value="Capitale">Capitale</option>
+	-->
+					</select>
+				
+					<span id="uploadModule" style="display: none;">	
+						<label for="file">Photo</label>
+						<input type="file" id="photoFile" name="photoFile" accept="image/*">
+						<input type="submit" id="uploadPhotoBtn" value="Upload">
+					</span>
+					
+					<!--<input type="text" name="categorie" id="catValue" value="catégorie">-->
+					<button id="editCatButton" class="btn btn-success"> <b>+</b> </button>
+
+					<div id="editCatBar" style='height:0px;'>
+					</div>
+
+				</div>
+
+			
 				<!-- MAP -->
 				<div class="col-sm-12" id="map"></div>
-				<!-- MAP -->
+				<!-- STORY -->
 				<div class="col-sm-4" id="story" style="display: none;"><p>Story</p></div>
 			</div>
 			<div id="popup" class="ol-popup">
