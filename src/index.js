@@ -263,7 +263,7 @@ typeInterraction.onchange = function() {
 			}
 		});
 
-		//Apres avoir ajouté un point on quitte le mode ajout et on nettoie le formulaire
+		//Apres avoir ajouté un point on quitte le mode ajout, on exporte la donnée et on nettoie le formulaire
 		draw.on('drawend', function (e) {
 			map.removeInteraction(draw)
 			typeInterraction.value = "-"
@@ -271,6 +271,11 @@ typeInterraction.onchange = function() {
 			document.getElementById('nameValue').value = ''
 			document.getElementById('catValue').value = '-'
 			document.getElementById('uploadModule').style.display = "none"
+			//on exporte apres 500ms (sinon donnée pas encore validé dans draw)
+			setTimeout(() => {
+				exportGeoJson()
+			}, 500)
+			// A FAIRE : notif flottante : Ajout point ok
 		});
 	} else if (typeInterraction.value == 'modify') {
 		document.getElementById('uploadModule').style.display = "inline"
@@ -295,6 +300,7 @@ typeInterraction.onchange = function() {
 				document.getElementById('idValue').value = ''
 				document.getElementById('nameValue').value = ''
 				document.getElementById('catValue').value = '-'
+				exportGeoJson()
 			} 
 
 		})
@@ -309,6 +315,7 @@ typeInterraction.onchange = function() {
 /////////////////////////////////////////////////////////////////////
 
 function exportGeoJson() {
+	console.log("EXPORTATION")
 	var writer = new GeoJSON()
 	
 	var geojsonStr = writer.writeFeatures(localGeoLayer.getSource().getFeatures())
@@ -344,6 +351,7 @@ map.on("singleclick", function(evt){
 */
 // Permettre la suppression des points sélectionnés
 document.addEventListener('keydown', function (e){
+	// A FAIRE : combinaison de touche ou bouton pour éviter confilit qd on saisit texte
 	//if(e.key == "Delete" && (e.key == "ShiftLeft" || e.key == "ShiftRight")) {
 	if(e.key == "Delete") {
 		//on enleve le comportement par default du navigateur
@@ -357,14 +365,6 @@ document.addEventListener('keydown', function (e){
 	}
 })
 
-document.getElementById("saveButton").onclick = function() {
-	map.removeInteraction(draw)
-	map.removeInteraction(select)
-	map.removeInteraction(modify)
-
-	typeInterraction.value = "-"
-	exportGeoJson()
-};
 
 document.getElementById("closeAlertBtn").onclick = function() {
 	document.getElementById('alertText').innerText = ''
