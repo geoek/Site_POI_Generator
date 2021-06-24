@@ -22,7 +22,7 @@ import {defaults as defaultControls} from 'ol/control'
 import { createProjection } from 'ol/proj'
 import {listCatInitialisation} from './category.js'
 import './category.js'
-import './story.js'
+import * as Story from './story.js'
 
 
 
@@ -206,8 +206,9 @@ map.on('singleclick', function (event) {
 // Creation des interactions avec la carte                         //
 /////////////////////////////////////////////////////////////////////
 
-function displayEditPanel(order) {
+export function displayEditPanel(order) {
 	if (order) {
+		Story.displayStoryPanel(false)
 		// Activation du panel
 		document.getElementById('map').classList.remove("col-sm-12")
 		document.getElementById('map').classList.add("col-sm-8")
@@ -216,7 +217,7 @@ function displayEditPanel(order) {
 		// Suppression panel
 		document.getElementById('map').classList.remove("col-sm-8")
 		document.getElementById('map').classList.add("col-sm-12")
-		document.getElementById('editPanel').innerHTML = ''
+		document.getElementById('editPanel').style.display = "none"
 	}
 }
 
@@ -324,6 +325,8 @@ typeInterraction.onchange = function() {
 	} else {
 		displayEditPanel(false)
 		document.getElementById('uploadModule').style.display = "none"
+		//document.getElementById('editPanel').innerHTML = ''
+
 	}
 }
 
