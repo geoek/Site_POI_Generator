@@ -436,10 +436,10 @@ function createStoryBoard() {
 		htmlOnglet += '<h2>'+ name +'</h2>'
 		htmlOnglet += '<hr>'
 		htmlOnglet += '<p>'+ cat +'</p>'
-		htmlOnglet += '<img class="fit-picture" src="./data/img/id_'+ id +'.jpg" alt="Lapin">'
+		htmlOnglet += '<img id="imgPoint" class="fit-picture" src="./data/img/id_'+ id +'.jpg" alt="Photo" onerror="javascript:this.src=\'./data/img/lapin.jpeg\'">'
+		htmlOnglet += '<img id="imgRemplacement" class="fit-picture" src="./data/img/lapin.jpeg" alt="Lapin" style="display:none;">'
 		htmlOnglet += '<hr>'
 		htmlOnglet += '</div>'
-		
 		document.getElementById('contenuOnglet').innerHTML = htmlOnglet
 
 		//Zoom sur l'entité
