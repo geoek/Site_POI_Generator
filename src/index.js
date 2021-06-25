@@ -213,11 +213,13 @@ export function displayEditPanel(order) {
 		document.getElementById('map').classList.remove("col-sm-12")
 		document.getElementById('map').classList.add("col-sm-8")
 		document.getElementById('editPanel').style.display = "block"
+		map.updateSize()
 	} else {
 		// Suppression panel
 		document.getElementById('map').classList.remove("col-sm-8")
 		document.getElementById('map').classList.add("col-sm-12")
 		document.getElementById('editPanel').style.display = "none"
+		map.updateSize()
 	}
 }
 
