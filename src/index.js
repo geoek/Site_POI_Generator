@@ -235,7 +235,6 @@ var modify = new Modify({
 });
 
 export function newActionFct() {
-	console.log("CHANGEMENT ACTION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 	map.removeInteraction(draw)
 	map.removeInteraction(select)
 	map.removeInteraction(modify)
