@@ -23,12 +23,14 @@
 				<span id="alertText"></span>
 			</div>
 
-			<select id="typeAction">
-				<option value="none"> - </selectionner></option>
-				<option value="addPoint">Add Point</option>
-				<option value="modify">Modify</option>
-			</select>
-			
+			<div class="col-sm-2">
+				<select id="typeAction" class="form-select"  aria-label="Default select example">
+					<option value="none"> - </selectionner></option>
+					<option value="addPoint">Add Point</option>
+					<option value="modify">Modify</option>
+				</select>
+			</div>
+
 			<label>&nbsp</label>
 			<button id="storyBoardBtn">Story</button>
 
@@ -40,7 +42,7 @@
 					<label>&nbsp Name</label>
 					<input type="text" id="nameValue" class="form-control" placeholder="Name" value="" aria-label="Name" aria-describedby="basic-addon1">
 					<label>&nbsp  Catégorie</label>
-					<select id="catValue">
+					<select id="catValue" class="form-select" aria-label="Default select example">
 	<!--				<option value="Ville" selected>Ville</option>
 					<option value="Village">Village</option>
 					<option value="Capitale">Capitale</option>
@@ -49,8 +51,8 @@
 				
 					<span id="uploadModule" style="display: none;">	
 						<label for="file">Photo</label>
-						<input type="file" id="photoFile" name="photoFile" accept="image/*">
-						<input type="submit" id="uploadPhotoBtn" value="Upload">
+						<input type="file" class="form-control" id="photoFile" name="photoFile" accept="image/*">
+						<button type="submit" id="uploadPhotoBtn" class="btn btn-primary">Upload</button>
 					</span>
 					
 					<!--<input type="text" name="categorie" id="catValue" value="catégorie">-->

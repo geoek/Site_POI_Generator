@@ -222,6 +222,9 @@ export function displayEditPanel(order) {
 }
 
 var typeInterraction = document.getElementById('typeAction')
+typeInterraction.onchange = function() {
+	newActionFct()
+}
 
 var draw
 var select = new Select();
@@ -229,7 +232,8 @@ var modify = new Modify({
 	features: select.getFeatures()
 });
 
-typeInterraction.onchange = function() {
+export function newActionFct() {
+	console.log("CHANGEMENT ACTION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 	map.removeInteraction(draw)
 	map.removeInteraction(select)
 	map.removeInteraction(modify)
@@ -283,10 +287,6 @@ typeInterraction.onchange = function() {
 		draw.on('drawend', function (e) {
 			map.removeInteraction(draw)
 			typeInterraction.value = "-"
-			document.getElementById('idValue').value = ''
-			document.getElementById('nameValue').value = ''
-			document.getElementById('catValue').value = '-'
-			document.getElementById('uploadModule').style.display = "none"
 			//on exporte apres 500ms (sinon donnée pas encore validé dans draw)
 			setTimeout(() => {
 				exportGeoJson()
@@ -314,16 +314,22 @@ typeInterraction.onchange = function() {
 				//mise à jour des attributs
 				e.deselected[0].values_.name=document.getElementById('nameValue').value
 				e.deselected[0].values_.category=document.getElementById('catValue').value
-				console.log(e)
-				document.getElementById('idValue').value = ''
-				document.getElementById('nameValue').value = ''
-				document.getElementById('catValue').value = '-'
-				exportGeoJson()
+				setTimeout(() => {
+					exportGeoJson()
+				}, 500)
+				setTimeout(() => {
+					document.getElementById('idValue').value = ''
+					document.getElementById('nameValue').value = ''
+					document.getElementById('catValue').value = '-'
+				}, 500)
 			} 
 
 		})
 	} else {
 		displayEditPanel(false)
+		document.getElementById('idValue').value = ''
+		document.getElementById('nameValue').value = ''
+		document.getElementById('catValue').value = '-'
 		document.getElementById('uploadModule').style.display = "none"
 		//document.getElementById('editPanel').innerHTML = ''
 
