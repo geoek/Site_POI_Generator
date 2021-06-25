@@ -37,26 +37,29 @@
 			<div class="row">
 
 				<div class="col-sm-4" id="editPanel" style="display: none;">
-					<label>&nbsp Id</label>
-					<input type="number" id="idValue" class="form-control col-2" placeholder="Id" value="" aria-label="Identifiant" aria-describedby="basic-addon1" readonly>
-					<label>&nbsp Name</label>
-					<input type="text" id="nameValue" class="form-control" placeholder="Name" value="" aria-label="Name" aria-describedby="basic-addon1">
-					<label>&nbsp  Catégorie</label>
-					<select id="catValue" class="form-select" aria-label="Default select example">
-	<!--				<option value="Ville" selected>Ville</option>
-					<option value="Village">Village</option>
-					<option value="Capitale">Capitale</option>
-	-->
-					</select>
-				
+					<form class="form-floating">
+						<input type="number" id="idValue" class="form-control col-2" placeholder="Id" value="" aria-label="Identifiant" aria-describedby="basic-addon1" readonly>	
+						<label for="idValue">Id</label>
+					</form>
+					<form class="form-floating">
+						<input type="text" id="nameValue" class="form-control" placeholder="Name" value="" aria-label="Name" aria-describedby="basic-addon1">
+						<label for="nameValue">Name</label>
+					</form>
+					<form class="form-floating">
+						<select id="catValue" class="form-select" aria-label="Default select example">
+							<!-- Complete dynamicaly by JS -->
+						</select>
+						<label for="catValue">Catégorie</label>
+					</form>
 					<span id="uploadModule" style="display: none;">	
-						<label for="file">Photo</label>
 						<input type="file" class="form-control" id="photoFile" name="photoFile" accept="image/*">
+						<label for="photoFile">Photo</label>
 						<button type="submit" id="uploadPhotoBtn" class="btn btn-primary">Upload</button>
 					</span>
 					
 					<!--<input type="text" name="categorie" id="catValue" value="catégorie">-->
-					<button id="editCatButton" class="btn btn-success"> <b>+</b> </button>
+					<button id="editCatButton" class="btn btn-success"> Edit Catégories </button>
+
 
 					<div id="editCatBar" style='height:0px;'>
 					</div>
