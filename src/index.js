@@ -272,7 +272,7 @@ export function newActionFct() {
 			if (document.getElementById('nameValue').value == '' || 
 			document.getElementById('catValue').value == '-') {
 				draw.abortDrawing()
-				document.getElementById('alertText').innerText = "Renseignez les propriétées"
+				document.getElementById('alertText').innerText = "Renseignez d'abord les propriétées, puis placez le point sur la carte"
 				document.getElementById('alertBar').style.display = "block"
 			} else {
 				// on enregistre les propriétés
@@ -433,7 +433,9 @@ document.getElementById("uploadPhotoBtn").onclick = function() {
 		request.open("POST", "./uploadphoto/");
 		request.send(formData);
 
-		alert("Upload OK")
+		//alert("Upload OK")
+		document.getElementById('alertText').innerText = "Upload de la photo fini !"
+		document.getElementById('alertBar').style.display = "block"
 		// A FAIRE : Rajouter notif flottante qd upload ok
 	}
 }
