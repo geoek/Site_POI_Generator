@@ -17,22 +17,28 @@
 				</div>
 			</div>
 
-			<div id="alertBar" class="alert alert-danger" role="alert" style='display:none;'>
-				
-				<span id="closeAlertBtn" class="closeBtn">x</span>
-				<span id="alertText"></span>
-			</div>
 
-			<div class="col-sm-2">
-				<select id="typeAction" class="form-select"  aria-label="Default select example">
-					<option value="none"> - </selectionner></option>
-					<option value="addPoint">Add Point</option>
-					<option value="modify">Modify</option>
-				</select>
-			</div>
 
-			<label>&nbsp</label>
-			<button id="storyBoardBtn">Story</button>
+			<div class="row">
+				<div class="col-sm-2">
+					<select id="typeAction" class="form-select"  aria-label="Default select example">
+						<option value="none"> - </selectionner></option>
+						<option value="addPoint">Add Point</option>
+						<option value="modify">Modify</option>
+					</select>
+				</div>
+	
+				<div class="col-sm-8">
+					<div id="alertBar" class="alert alert-danger" role="alert" style='display:none;'>
+						<span id="closeAlertBtn" class="closeBtn">x</span>
+						<span id="alertText"></span>
+					</div>
+				</div>
+
+				<button class="col-sm-2 btn btn-success" id="storyBoardBtn">Story</button>
+			</div>
+		
+
 
 			<div class="row">
 
@@ -53,8 +59,10 @@
 					</form>
 					<form class="form-floating">
 						<textarea id="descValue" class="form-control" aria-label="With textarea"></textarea>
-						<label for="nameValue">Description :</label>
+						<label for="descValue">Description :</label>
 					</form>
+
+					<hr>
 
 					<span id="uploadModule" style="display: none;">	
 						<input type="file" class="form-control" id="photoFile" name="photoFile" accept="image/*">
