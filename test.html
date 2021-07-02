@@ -1,0 +1,145 @@
+<html>
+<!-- Openlayers -->
+<link rel="stylesheet" href="https://openlayers.org/en/latest/css/ol.css" />
+<script type="text/javascript" src="https://openlayers.org/en/latest/build/ol.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.5.0/proj4.js" integrity="sha256-KJI74PS1qv3+hue+yyIWK/l8TxvS9u4WX7QDrtHkHOo=" crossorigin="anonymous"></script>
+
+<!-- ol-ext -->
+<link rel="stylesheet" href="https://cdn.rawgit.com/Viglino/ol-ext/master/dist/ol-ext.min.css" />
+<script type="text/javascript" src="https://cdn.rawgit.com/Viglino/ol-ext/master/dist/ol-ext.min.js"></script>
+                   
+
+<div id="mouse_s"></div></div>
+
+<div id="demo"></div>
+<button onclick="getfeatures()">click me</button>
+<select id="type">
+    <option value="None">Modify</option>
+    <option value="Point">Point</option>
+    <option value="LineString">LineString</option>
+    <option value="Polygon">Polygon</option>
+</select>
+
+
+<div id="map"></div>
+<script>
+  var style = {
+    'Polygon': new ol.style.Style({
+              stroke: new ol.style.Stroke({
+                      color: 'yellow', width: 1
+                      }),
+              fill: new ol.style.Fill({
+                      color: 'rgba(255, 255, 0, 1)'
+                      })
+              }),
+
+    'LineString': new ol.style.Style({
+              stroke: new ol.style.Stroke({
+                      color: 'red', width: 1
+                      }),
+
+              }),
+	'Point' : new ol.style.Style({
+		image: new ol.style.Circle({
+			radius: 10,
+			fill: new ol.style.Fill({
+				color: '#3399CC',
+			}),
+			stroke: new ol.style.Stroke({
+				color: '#fff',
+				width: 0.5,
+			}),
+		}),
+	})
+        };
+
+  var styleFunction = function(feature) {
+    return style[feature.getGeometry().getType()];
+  };
+
+  var geojsonObject = {
+
+    'type': 'FeatureCollection',
+    'crs': {
+        'type': 'name'
+        },
+        'features':[]
+                };
+    var features = (new ol.format.GeoJSON()).readFeatures(geojsonObject);
+    var vectorSource = new ol.source.Vector({
+        features: features,
+        format: new ol.format.GeoJSON()
+    });
+
+
+    var vectorLayer = new ol.layer.Vector({
+        title: "Vector",
+        source: vectorSource,
+        style: styleFunction
+
+    });
+
+    var osm = new ol.layer.Tile({
+        source: new ol.source.OSM({layer: 'sat'})
+        });
+
+    var map = new ol.Map({
+        layers: [osm, vectorLayer],
+        target: 'map',
+        view: new ol.View({center: [2131312,6027113],zoom: 18})
+            });
+    var mousePosition = new ol.control.MousePosition({
+        target: 'mouse_p'
+            });
+
+    var scaleLine = new ol.control.ScaleLine({
+    target: 'mouse_s'});
+    map.addControl(scaleLine);
+    map.addControl(mousePosition);
+
+    var draw;
+    var typeSelect = document.getElementById('type');
+
+
+    var select = new ol.interaction.Select();
+    var modify = new ol.interaction.Modify({
+    features: select.getFeatures()
+    });
+
+    function addInteraction(){
+        var value = typeSelect.value;
+        if (value !== 'None') {
+            draw = new ol.interaction.Draw({
+            source: vectorSource,
+            type: (value)       
+            });
+            map.addInteraction(draw);
+            vectorSource.addFeatures(draw);
+            }
+        else{
+            map.addInteraction(select);
+            map.addInteraction(modify);
+            }
+
+        }
+
+
+
+    typeSelect.onchange = function() {
+        map.removeInteraction(draw);
+        map.removeInteraction(select);
+        map.removeInteraction(modify);
+        addInteraction();
+    };
+
+
+    addInteraction();
+
+
+    var writer = new ol.format.GeoJSON();
+    var geojsonStr = writer.writeFeatures(vectorSource.getFeatures());
+
+    function getfeatures(){
+    document.getElementById("demo").innerHTML = geojsonStr;
+    }   
+</script>
