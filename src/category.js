@@ -5,7 +5,7 @@
 
 
 // Tableau des catégories
-let listCat = ["-"]
+let listCat = [{name:"-",color:"#FF00FF"}]
 
 function listCatInitialisation() {
 	// Chargement du fichier Json
@@ -21,10 +21,13 @@ function listCatInitialisation() {
 		console.log(jsonData)
 		for (let feat in jsonData.features) {
 			let cat = jsonData.features[feat].properties.category
-			if (listCat.indexOf(cat) >= 0){
+			// on recherche la position de l'objet dans la liste ayant le meme nom (pour savoir si il existe)
+			let pos = listCat.map(function(e) { return e.name; }).indexOf(cat);
+
+			if (pos >= 0){
 				//console.log("trouvé à " + listCat.indexOf(cat))
 			} else {
-				listCat.push(cat)
+				listCat.push({name:cat,color:'#FF0000'})
 			}
 		}
 		updateSelectCat()
@@ -67,9 +70,12 @@ let updateListCat = function() {
 	let catBarHtml = '<ul>'
 	for (let cat in listCat) {
 		// on ne veut pas afficher la catégorie par défault (-) car non supprimable
-		if (listCat[cat] != '-') {
+		if (listCat[cat].name != '-') {
 //			let htmlToAdd = '<li class="list-group-item elementCat">' + listCat[cat] + '<span class="deleteCat badge bg-danger" id="btn_' + listCat[cat] + '"> - </span></li>'
-			let htmlToAdd = '<li class="elementCat">' + listCat[cat] + '<div class="colorPicker"> </div>' + '<span class="deleteCat badge bg-danger" id="btn_' + listCat[cat] + '"> x </span></li>'
+			let htmlToAdd = '<li class="elementCat">' + listCat[cat].name
+			htmlToAdd += '<label class="colorLabel"><input type="color" class="colorLabelInput" id="color_' + listCat[cat].name + ' "name="CatColor" value="' + listCat[cat].color  + '" "></label>'
+			htmlToAdd += '<span class="deleteCat badge bg-danger" id="btn_' + listCat[cat].name + '"> x </span></li>'
+			
 			catBarHtml += htmlToAdd
 		}
 	}
@@ -103,17 +109,6 @@ let updateListCat = function() {
 	  	})(i);
 	}
 
-
-
-
-
-
-
-
-
-
-
-
 	// creation des actions des boutons de suppression de cat
 	for (let i in document.getElementsByClassName('deleteCat') ) {
 		let id = document.getElementsByClassName('deleteCat')[i].id
@@ -121,8 +116,9 @@ let updateListCat = function() {
 			console.log(id)
 			document.getElementById(id).onclick = function() {
 				for(var j = 0 ; j < listCat.length; j++) {
-					if(listCat[j] == id.substr(4)) {
-						delete listCat[j]
+					if(listCat[j].name == id.substr(4)) {
+						// on supprime 1 element à la position j
+						listCat.splice(j,1)
 					}
 				}
 				updateListCat()
@@ -135,8 +131,11 @@ let updateListCat = function() {
 	document.getElementById("addCatBtn").onclick = function() {
 		let newCat = document.getElementById("newCat").value
 		console.log(listCat.indexOf(newCat))
-		if (listCat.indexOf(newCat) < 0 && newCat != '') {
-			listCat.push(newCat)
+		// on recherche la position de l'objet dans la liste ayant le meme nom (pour savoir si il existe)
+		let pos = listCat.map(function(e) { return e.name; }).indexOf(newCat);
+
+		if (pos < 0 && newCat != '') {
+			listCat.push({name:newCat, color:"#00FF00"})
 			updateListCat()
 		} else {
 			alert(newCat + " Vide ou existe déjà !")
@@ -153,7 +152,7 @@ function updateSelectCat() {
 	for (var i = 0; i < listCat.length; i++) {
 		var opt = listCat[i]
 		if (opt != undefined) {
-			tmpHtml += '<option value="' + opt + '">' + opt + '</option>'
+			tmpHtml += '<option value="' + opt.name + '">' + opt.name + '</option>'
 		}
 	}
 	document.getElementById("catValue").innerHTML = tmpHtml
