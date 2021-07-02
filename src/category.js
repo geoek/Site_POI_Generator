@@ -1,3 +1,4 @@
+import $ from 'jquery'
 
 //////////////////////////////////////////////////
 ///             Création liste de Catégories   ///
@@ -73,7 +74,7 @@ let updateListCat = function() {
 		if (listCat[cat].name != '-') {
 //			let htmlToAdd = '<li class="list-group-item elementCat">' + listCat[cat] + '<span class="deleteCat badge bg-danger" id="btn_' + listCat[cat] + '"> - </span></li>'
 			let htmlToAdd = '<li class="elementCat">' + listCat[cat].name
-			htmlToAdd += '<label class="colorLabel"><input type="color" class="colorLabelInput" id="color_' + listCat[cat].name + ' "name="CatColor" value="' + listCat[cat].color  + '" "></label>'
+			htmlToAdd += '<label class="colorLabel" style="background-color:' + listCat[cat].color  + '"><input type="color" class="colorLabelInput" id="color_' + listCat[cat].name + ' "name="CatColor"></label>'
 			htmlToAdd += '<span class="deleteCat badge bg-danger" id="btn_' + listCat[cat].name + '"> x </span></li>'
 			
 			catBarHtml += htmlToAdd
@@ -84,10 +85,7 @@ let updateListCat = function() {
 	// Champ de nouvelle cat
 	catBarHtml += "<label>&nbsp Nouvelle Catégorie : &nbsp</label>"
 	catBarHtml += '<input type="text" id="newCat" name="newCat">'
-
-
-	
-	catBarHtml += '<label class="colorLabel"><input type="color" class="colorLabelInput" name="newCatColor" value="#FF00FF" "></label>'
+	catBarHtml += '<label class="colorLabel"><input type="color" id="newCatColor" class="colorLabelInput" name="newCatColor" value="#FF00FF" "></label>'
 
 	// bouton de nouvelle cat
 	let addButton = document.createElement('button')
@@ -105,6 +103,7 @@ let updateListCat = function() {
 		(function(index) {
 			coloPickSelection[index].onchange = function() {
 				this.parentNode.style.backgroundColor = this.value;
+				saveJsonCat()
 			}
 	  	})(i);
 	}
@@ -113,7 +112,6 @@ let updateListCat = function() {
 	for (let i in document.getElementsByClassName('deleteCat') ) {
 		let id = document.getElementsByClassName('deleteCat')[i].id
 		if ( id != undefined) {
-			console.log(id)
 			document.getElementById(id).onclick = function() {
 				for(var j = 0 ; j < listCat.length; j++) {
 					if(listCat[j].name == id.substr(4)) {
@@ -121,21 +119,23 @@ let updateListCat = function() {
 						listCat.splice(j,1)
 					}
 				}
+				saveJsonCat()
 				updateListCat()
 			}
 		}
-
 	}
 
 	// action d'ajout de cat
 	document.getElementById("addCatBtn").onclick = function() {
 		let newCat = document.getElementById("newCat").value
+		let newCatColor = document.getElementById("newCatColor").value
 		console.log(listCat.indexOf(newCat))
 		// on recherche la position de l'objet dans la liste ayant le meme nom (pour savoir si il existe)
 		let pos = listCat.map(function(e) { return e.name; }).indexOf(newCat);
 
 		if (pos < 0 && newCat != '') {
-			listCat.push({name:newCat, color:"#00FF00"})
+			listCat.push({name:newCat, color:newCatColor})
+			saveJsonCat()
 			updateListCat()
 		} else {
 			alert(newCat + " Vide ou existe déjà !")
@@ -157,6 +157,45 @@ function updateSelectCat() {
 	}
 	document.getElementById("catValue").innerHTML = tmpHtml
 
-}		
+}
+
+
+function saveJsonCat() {
+	console.log("SAVE JSON CAT")
+
+	
+	var jsonStr = listCat
+	//il faut rajouter le crs dans la donnée sinon ca bugge
+	
+	//envoie du fichier eu serveur via node js
+	$.ajax({
+		url: "./storelistcat/",
+		type: "get", //send it through get method
+		data: { 
+			data: jsonStr,
+		},
+		dataType: 'text',
+		success: function(data,response) {
+			console.log(response)
+			console.log(data)
+		},
+		error: function(xhr) {
+		  console.log('ko')
+		}
+	});
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
 
 export {listCatInitialisation}

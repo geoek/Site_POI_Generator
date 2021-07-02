@@ -37,7 +37,22 @@ app.get('/storejson/', (request, response) => {
         }
     })
 })
-    /*
+
+app.get('/storelistcat/', (request, response) => {
+    var jsonString = request.query.data;
+    console.log(jsonString)
+    var myJSON = JSON.stringify(jsonString)
+    console.log(myJSON)
+    fs.writeFile('./data/listCat.json', myJSON, err => {
+        if (err) {
+            console.log('Error writing file', err)
+        } else {
+            console.log('Successfully wrote file')
+        }
+    })
+})
+
+/*
         var id = request.query.id; 
         var x = request.query.x; 
         var y = request.query.y; 
