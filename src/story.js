@@ -120,17 +120,19 @@ function createStoryBoard() {
 		document.getElementById('nextButton').addEventListener('click', () => {
 			if (currentOnglet < jsonData.features.length -1) {
 				currentOnglet += 1
+
+                console.log('currentOnglet ' + currentOnglet)
+                displayOnglet(currentOnglet,jsonData)
 			}
 
-			console.log('currentOnglet ' + currentOnglet)
-			displayOnglet(currentOnglet,jsonData)
 		})
 		document.getElementById('prevButton').addEventListener('click', () => {
 			if (currentOnglet > 0) {
 				currentOnglet -= 1
-			}
+
 			console.log('currentOnglet ' + currentOnglet)
 			displayOnglet(currentOnglet,jsonData)
+            }
 		})
 	}
 }

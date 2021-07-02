@@ -69,7 +69,7 @@ let updateListCat = function() {
 		// on ne veut pas afficher la catégorie par défault (-) car non supprimable
 		if (listCat[cat] != '-') {
 //			let htmlToAdd = '<li class="list-group-item elementCat">' + listCat[cat] + '<span class="deleteCat badge bg-danger" id="btn_' + listCat[cat] + '"> - </span></li>'
-			let htmlToAdd = '<li class="elementCat">' + listCat[cat] + '<span class="deleteCat badge bg-danger" id="btn_' + listCat[cat] + '"> x </span></li>'
+			let htmlToAdd = '<li class="elementCat">' + listCat[cat] + '<div class="colorPicker"> </div>' + '<span class="deleteCat badge bg-danger" id="btn_' + listCat[cat] + '"> x </span></li>'
 			catBarHtml += htmlToAdd
 		}
 	}
@@ -79,7 +79,9 @@ let updateListCat = function() {
 	catBarHtml += "<label>&nbsp Nouvelle Catégorie : &nbsp</label>"
 	catBarHtml += '<input type="text" id="newCat" name="newCat">'
 
+
 	
+	catBarHtml += '<label class="colorLabel"><input type="color" class="colorLabelInput" name="newCatColor" value="#FF00FF" "></label>'
 
 	// bouton de nouvelle cat
 	let addButton = document.createElement('button')
@@ -88,9 +90,29 @@ let updateListCat = function() {
 	addButton.setAttribute("class", "btn btn-primary")
 	catBarHtml += addButton.outerHTML
 
-
 	// Affichage du html
 	document.getElementById("editCatBar").innerHTML = catBarHtml
+
+	// Colors Pickers Actions
+	var coloPickSelection = document.getElementsByClassName("colorLabelInput");
+	for(var i = 0; i < coloPickSelection.length; i++) {
+		(function(index) {
+			coloPickSelection[index].onchange = function() {
+				this.parentNode.style.backgroundColor = this.value;
+			}
+	  	})(i);
+	}
+
+
+
+
+
+
+
+
+
+
+
 
 	// creation des actions des boutons de suppression de cat
 	for (let i in document.getElementsByClassName('deleteCat') ) {

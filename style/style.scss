@@ -93,6 +93,35 @@ body {
   margin-left: 15px;
 }
 
+#newCatColor {
+  margin-left: 15px;
+  width: 20px;
+  height: 20px;
+}
+
+.colorLabel{
+  margin-left: 10px;
+  background-color: #F0F;
+  height: 24px;
+  width: 24px;
+  border-radius: 12px;
+  border-color: #000;
+  border: 1px solid #666;
+}
+
+.colorLabelInput {
+  visibility: hidden;
+}
+
+.colorPicker {
+  display: inline-block;
+  margin-left: 5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background: green;
+}
+
 /*
 .btn {
   margin-left: 5px;
