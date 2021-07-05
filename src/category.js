@@ -6,7 +6,7 @@ import $ from 'jquery'
 
 
 // Tableau des catégories
-let listCat = []
+export let listCat = []
 
 /*
 function listCatInitialisation() {
@@ -36,7 +36,7 @@ function listCatInitialisation() {
 	}
 }
 */
-function listCatInitialisation() {
+export function listCatInitialisation() {
 	// Chargement du fichier Json
 	var requestURL = './data/listCat.json'
 	var request = new XMLHttpRequest()
@@ -127,8 +127,11 @@ let updateListCat = function() {
 			// index correspond au numero de l'élément dans la liste. Attention, - n'est pas affiché. donc faire +1
 			coloPickSelection[index].onchange = function() {
 				this.parentNode.style.backgroundColor = this.value;
-				//sauve le chgmt dans listCat
-				listCat[index+1].color = this.value 
+				//sauve le chgmt dans listCat (on teste l'index pour le cas où on a changé le valeur d'un nouvel ajout)
+				// donc pas encore dans listCat
+				if (index + 1< listCat.length) {
+					listCat[index+1].color = this.value
+				}
 				//sauve dans le json
 				saveJsonCat()
 			}
@@ -212,5 +215,3 @@ function saveJsonCat() {
 	});
 
 }
-
-export {listCatInitialisation}

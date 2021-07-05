@@ -20,7 +20,7 @@ import $ from 'jquery'
 import ScaleLine from 'ol/control/ScaleLine'
 import {defaults as defaultControls} from 'ol/control'
 import { createProjection } from 'ol/proj'
-import {listCatInitialisation} from './category.js'
+import {listCat, listCatInitialisation} from './category.js'
 import './category.js'
 import * as Story from './story.js'
 
@@ -88,53 +88,10 @@ var testLayer = new LayerVector({
 
 map.addLayer(testLayer)
 
+var localGeoLayer
 
-let styleCatVille = new Style({
-	image: new Circle({
-		radius: 7,
-		fill: new Fill({
-			color: '#3399CC',
-		}),
-		stroke: new Stroke({
-			color: '#fff',
-			width: 0.5,
-		})
-	})
-})
-
-let styleCatCapitale = new Style({
-	image: new Circle({
-		radius: 7,
-		fill: new Fill({
-			color: '#FF0000',
-		}),
-		stroke: new Stroke({
-			color: '#fff',
-			width: 0.5,
-		})
-	})
-})
-
-let styleCatVillage = new Style({
-	image: new Circle({
-		radius: 7,
-		fill: new Fill({
-			color: '#00BB55',
-		}),
-		stroke: new Stroke({
-			color: '#fff',
-			width: 0.5,
-		})
-	})
-})
-
-var localGeoLayer = new LayerVector({
-	title: "My json",
-	source: new SourceVector({
-		url: 'data/mygeojson.geojson',
-		format: new GeoJSON(),
-	}),
-/*	style: new Style({
+function addPoiToMap() {
+	let styleCatVille = new Style({
 		image: new Circle({
 			radius: 7,
 			fill: new Fill({
@@ -143,27 +100,85 @@ var localGeoLayer = new LayerVector({
 			stroke: new Stroke({
 				color: '#fff',
 				width: 0.5,
-			}),
-		}),
+			})
+		})
 	})
-*/
-	style: function(feature, resolution) {
-		if (feature.getProperties().category === 'Ville') {
-			// create styles...
-			return styleCatVille
-		}
-		else if (feature.getProperties().category === 'Capitale') {
-			// create styles...
-			return styleCatCapitale
-		}
-		else{
-			return styleCatVillage
-		}
+
+	let styleCatCapitale = new Style({
+		image: new Circle({
+			radius: 7,
+			fill: new Fill({
+				color: '#FF0000',
+			}),
+			stroke: new Stroke({
+				color: '#fff',
+				width: 0.5,
+			})
+		})
+	})
+
+	let styleCatVillage = new Style({
+		image: new Circle({
+			radius: 7,
+			fill: new Fill({
+				//color: '#00BB55',
+				color: listCat[1].color,
+			}),
+			stroke: new Stroke({
+				color: '#fff',
+				width: 0.5,
+			})
+		})
+	})
+
+	let styleCat=[]
+
+	for (let cat in listCat) {
+		styleCat[cat] = new Style({
+			image: new Circle({
+				radius: 7,
+				fill: new Fill({
+					color: listCat[cat].color,
+				}),
+				stroke: new Stroke({
+					color: '#fff',
+					width: 0.5,
+				})
+			})
+		})
 	}
-});
 
-map.addLayer(localGeoLayer)
 
+	localGeoLayer = new LayerVector({
+		title: "My json",
+		source: new SourceVector({
+			url: 'data/mygeojson.geojson',
+			format: new GeoJSON(),
+		}),
+		style: function(feature, resolution) {
+			for (let cat in listCat) {
+				if (feature.getProperties().category === listCat[cat].name) {
+					return styleCat[cat]
+				}
+			}
+			/*
+			if (feature.getProperties().category === 'Ville') {
+				// create styles...
+				return styleCatVille
+			}
+			else if (feature.getProperties().category === 'Capitale') {
+				// create styles...
+				return styleCatCapitale
+			}
+			else{
+				return styleCatVillage
+			}
+			*/
+		}
+	});
+
+	map.addLayer(localGeoLayer)
+}
 
 
 ////////////////////////////
@@ -402,6 +417,15 @@ document.getElementById("closeAlertBtn").onclick = function() {
 
 window.onload = function() {
 	listCatInitialisation()
+	console.log("1")
+
+	//on attend un peu le temps de charger la liste des cat
+	// A FAIRE : améliorer
+	setTimeout(() => {
+		addPoiToMap()
+	}, 1000)
+	
+	console.log("2")
 }
 
 
