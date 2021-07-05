@@ -40,7 +40,6 @@ app.get('/storejson/', (request, response) => {
 
 app.get('/storelistcat/', (request, response) => {
     var jsonString = request.query.data;
-    console.log(jsonString)
     var myJSON = JSON.stringify(jsonString)
     console.log(myJSON)
     fs.writeFile('./data/listCat.json', myJSON, err => {

@@ -6,8 +6,9 @@ import $ from 'jquery'
 
 
 // Tableau des catégories
-let listCat = [{name:"-",color:"#FF00FF"}]
+let listCat = []
 
+/*
 function listCatInitialisation() {
 	// Chargement du fichier Json
 	var requestURL = './data/mygeojson.geojson'
@@ -30,6 +31,28 @@ function listCatInitialisation() {
 			} else {
 				listCat.push({name:cat,color:'#FF0000'})
 			}
+		}
+		updateSelectCat()
+	}
+}
+*/
+function listCatInitialisation() {
+	// Chargement du fichier Json
+	var requestURL = './data/listCat.json'
+	var request = new XMLHttpRequest()
+	request.open('GET', requestURL)
+	request.responseType = 'json'
+	request.send()
+
+	// On parse le Json pour créer la liste de catégories
+	request.onload = function() {
+		var jsonData = request.response;
+		for (let feat in jsonData) {
+			console.log(feat)
+			let cat = jsonData[feat].name
+			let color = jsonData[feat].color
+
+			listCat.push({name:cat,color:color})
 		}
 		updateSelectCat()
 	}
@@ -101,8 +124,12 @@ let updateListCat = function() {
 	var coloPickSelection = document.getElementsByClassName("colorLabelInput");
 	for(var i = 0; i < coloPickSelection.length; i++) {
 		(function(index) {
+			// index correspond au numero de l'élément dans la liste. Attention, - n'est pas affiché. donc faire +1
 			coloPickSelection[index].onchange = function() {
 				this.parentNode.style.backgroundColor = this.value;
+				//sauve le chgmt dans listCat
+				listCat[index+1].color = this.value 
+				//sauve dans le json
 				saveJsonCat()
 			}
 	  	})(i);
@@ -183,18 +210,6 @@ function saveJsonCat() {
 		  console.log('ko')
 		}
 	});
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
 
