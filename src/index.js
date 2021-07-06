@@ -219,6 +219,7 @@ export function newActionFct() {
 
 		document.getElementById('nameValue').value = ''
 		document.getElementById('catValue').value = '-'
+		document.getElementById('descValue').value = ''
 
 		let tempSource = localGeoLayer.getSource()
 		let sizeJson = tempSource.getFeatures().length
@@ -253,7 +254,8 @@ export function newActionFct() {
 				e.feature.setProperties({
 					'id': nextId,
 					'name': document.getElementById('nameValue').value,
-					'category': document.getElementById('catValue').value
+					'category': document.getElementById('catValue').value,
+					'description': document.getElementById('descValue').value
 				})
 			}
 		});
@@ -282,6 +284,8 @@ export function newActionFct() {
 				document.getElementById('idValue').value=e.selected[0].values_.id
 				document.getElementById('nameValue').value=e.selected[0].values_.name
 				document.getElementById('catValue').value=e.selected[0].values_.category
+				document.getElementById('descValue').value=e.selected[0].values_.description
+				
 			}
 			else {
 				console.log("Select END")
@@ -289,6 +293,7 @@ export function newActionFct() {
 				//mise à jour des attributs
 				e.deselected[0].values_.name=document.getElementById('nameValue').value
 				e.deselected[0].values_.category=document.getElementById('catValue').value
+				e.deselected[0].values_.description=document.getElementById('descValue').value
 				setTimeout(() => {
 					exportGeoJson()
 				}, 500)
@@ -296,6 +301,7 @@ export function newActionFct() {
 					document.getElementById('idValue').value = ''
 					document.getElementById('nameValue').value = ''
 					document.getElementById('catValue').value = '-'
+					document.getElementById('descValue').value = ''
 				}, 500)
 			} 
 
@@ -305,6 +311,7 @@ export function newActionFct() {
 		document.getElementById('idValue').value = ''
 		document.getElementById('nameValue').value = ''
 		document.getElementById('catValue').value = '-'
+		document.getElementById('descValue').value = ''
 		document.getElementById('uploadModule').style.display = "none"
 		//document.getElementById('editPanel').innerHTML = ''
 
