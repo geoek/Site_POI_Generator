@@ -1,5 +1,5 @@
 import $ from 'jquery'
-
+import * as MyMainVar from './index.js'
 //////////////////////////////////////////////////
 ///             Création liste de Catégories   ///
 //////////////////////////////////////////////////
@@ -145,12 +145,23 @@ let updateListCat = function() {
 			document.getElementById(id).onclick = function() {
 				for(var j = 0 ; j < listCat.length; j++) {
 					if(listCat[j].name == id.substr(4)) {
-						// on supprime 1 element à la position j
-						listCat.splice(j,1)
+						isCatInGeoJson(listCat[j].name,j,function(trouve,j)  {
+							console.log(trouve)
+							if (trouve) {
+								document.getElementById('alertText').innerText = "Il existe un point avec cette catégorie"
+								document.getElementById('alertBar').style.display = "block"
+							} else {
+								// on supprime 1 element à la position j
+								listCat.splice(j,1)
+							}
+						})
 					}
 				}
-				saveJsonCat()
-				updateListCat()
+				setTimeout(() => {
+					saveJsonCat()
+					updateListCat()
+				}, 1000)
+				
 			}
 		}
 	}
@@ -168,7 +179,8 @@ let updateListCat = function() {
 			saveJsonCat()
 			updateListCat()
 		} else {
-			alert(newCat + " Vide ou existe déjà !")
+			document.getElementById('alertText').innerText = newCat + " Vide ou existe déjà !"
+			document.getElementById('alertBar').style.display = "block"
 		}
 	}
 
@@ -215,3 +227,57 @@ function saveJsonCat() {
 	});
 
 }
+
+
+function readTextFile(file, callback) {
+    var rawFile = new XMLHttpRequest();
+    rawFile.overrideMimeType("application/json");
+    rawFile.open("GET", file, true);
+    rawFile.onreadystatechange = function() {
+        if (rawFile.readyState === 4 && rawFile.status == "200") {
+            callback(rawFile.responseText);
+        }
+    }
+    rawFile.send(null);
+}
+
+function isCatInGeoJson(cat,j,_callback) {
+	readTextFile("./data/mygeojson.geojson", function(text){
+		var jsonData = JSON.parse(text);
+		console.log(jsonData);
+
+		for (let feat in jsonData.features) {
+			let catJson = jsonData.features[feat].properties.category
+			console.log(catJson + "++++++++++++++++++++" + cat)
+			// on recherche la position de l'objet dans la liste ayant le meme nom (pour savoir si il existe)
+			if (cat == catJson) {
+				_callback(true,j)
+				return
+			}
+		}
+		_callback(false,j)
+		return
+	})
+}
+
+
+/*
+	// On parse le Json pour créer la liste de catégories
+	request.onload = function() {
+		var jsonData = request.response;
+		console.log(jsonData)
+		for (let feat in jsonData.features) {
+			let catJson = jsonData.features[feat].properties.category
+			console.log(catJson + "++++++++++++++++++++" + cat)
+			// on recherche la position de l'objet dans la liste ayant le meme nom (pour savoir si il existe)
+			if (cat == catJson) {
+				setTimeout(() => {
+					return true
+				}, 500)
+			}
+		}
+		return false
+
+	}
+*/
+

@@ -90,7 +90,8 @@ map.addLayer(testLayer)
 
 var localGeoLayer
 
-function addPoiToMap() {
+export function addPoiToMap() {
+	map.removeLayer(localGeoLayer)
 	let styleCatDefault = new Style({
 		image: new Circle({
 			radius: 7,
