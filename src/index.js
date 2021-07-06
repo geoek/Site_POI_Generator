@@ -91,38 +91,11 @@ map.addLayer(testLayer)
 var localGeoLayer
 
 function addPoiToMap() {
-	let styleCatVille = new Style({
+	let styleCatDefault = new Style({
 		image: new Circle({
 			radius: 7,
 			fill: new Fill({
 				color: '#3399CC',
-			}),
-			stroke: new Stroke({
-				color: '#fff',
-				width: 0.5,
-			})
-		})
-	})
-
-	let styleCatCapitale = new Style({
-		image: new Circle({
-			radius: 7,
-			fill: new Fill({
-				color: '#FF0000',
-			}),
-			stroke: new Stroke({
-				color: '#fff',
-				width: 0.5,
-			})
-		})
-	})
-
-	let styleCatVillage = new Style({
-		image: new Circle({
-			radius: 7,
-			fill: new Fill({
-				//color: '#00BB55',
-				color: listCat[1].color,
 			}),
 			stroke: new Stroke({
 				color: '#fff',
@@ -148,7 +121,6 @@ function addPoiToMap() {
 		})
 	}
 
-
 	localGeoLayer = new LayerVector({
 		title: "My json",
 		source: new SourceVector({
@@ -161,19 +133,6 @@ function addPoiToMap() {
 					return styleCat[cat]
 				}
 			}
-			/*
-			if (feature.getProperties().category === 'Ville') {
-				// create styles...
-				return styleCatVille
-			}
-			else if (feature.getProperties().category === 'Capitale') {
-				// create styles...
-				return styleCatCapitale
-			}
-			else{
-				return styleCatVillage
-			}
-			*/
 		}
 	});
 
