@@ -1,4 +1,5 @@
 import * as MyMainVar from './index.js'
+import * as EditPanel from './editPanel.js'
 
 ///////////////////////////////////////////////////////////
 /////////               STORY               ///////////////
@@ -6,7 +7,7 @@ import * as MyMainVar from './index.js'
 
 export function displayStoryPanel(order) {
 	if (order) {
-        MyMainVar.displayEditPanel(false)
+        EditPanel.displayEditPanel(false)
 		// Activation du panel
 		document.getElementById('map').classList.remove("col-sm-12")
 		document.getElementById('map').classList.add("col-sm-8")
@@ -140,10 +141,11 @@ function createStoryBoard() {
 
 document.getElementById("storyBoardBtn").onclick = function() {
 	if (document.getElementById('story').style.display == 'none') {
+        console.log("DEMANDE AFFICHAGE STORY")
 		// Activation du panel
         // on arrete les outils d'édition
         document.getElementById('typeAction').value = '-'
-        MyMainVar.newActionFct()
+        EditPanel.newActionFct()
         //affichage paneau + creation
         displayStoryPanel(true)
         createStoryBoard()

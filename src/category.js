@@ -48,7 +48,6 @@ export function listCatInitialisation() {
 	request.onload = function() {
 		var jsonData = request.response;
 		for (let feat in jsonData) {
-			console.log(feat)
 			let cat = jsonData[feat].name
 			let color = jsonData[feat].color
 

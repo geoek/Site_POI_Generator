@@ -10,19 +10,17 @@ import {Group} from 'ol/layer'
 import {Point} from 'ol/geom'
 import {Vector as LayerVector} from 'ol/layer'
 import {Vector as SourceVector} from 'ol/source'
-import {Draw, Select, Modify} from 'ol/interaction'
 import {Circle, Fill, Stroke, Style} from 'ol/style'
 import Poi from './poi.js'
 import GeoJSON from 'ol/format/GeoJSON'
-import VectorSource from 'ol/source/Vector'
 import LayerSwitcher from 'ol-layerswitcher'
-import $ from 'jquery'
+
 import ScaleLine from 'ol/control/ScaleLine'
 import {defaults as defaultControls} from 'ol/control'
-import { createProjection } from 'ol/proj'
 import {listCat, listCatInitialisation} from './category.js'
 import './category.js'
-import * as Story from './story.js'
+import './story.js'
+import './editPanel.js'
 
 
 
@@ -54,7 +52,7 @@ var layerSwitcher = new LayerSwitcher({
 	groupSelectStyle: 'group'
   });
 map.addControl(layerSwitcher);
-
+/*
 //Utiliser l'instance pour les autres POI
 const myFirstPoi = new Poi({
 	name: 'Poi1',
@@ -85,10 +83,9 @@ var testLayer = new LayerVector({
 		}),
 	})
 });
-
 map.addLayer(testLayer)
-
-var localGeoLayer
+*/
+export var localGeoLayer
 
 export function addPoiToMap() {
 	map.removeLayer(localGeoLayer)
@@ -177,204 +174,6 @@ map.on('singleclick', function (event) {
 
 */
 
-/////////////////////////////////////////////////////////////////////
-// Creation des interactions avec la carte                         //
-/////////////////////////////////////////////////////////////////////
-
-export function displayEditPanel(order) {
-	if (order) {
-		Story.displayStoryPanel(false)
-		// Activation du panel
-		document.getElementById('map').classList.remove("col-sm-12")
-		document.getElementById('map').classList.add("col-sm-8")
-		document.getElementById('editPanel').style.display = "block"
-		map.updateSize()
-	} else {
-		// Suppression panel
-		document.getElementById('map').classList.remove("col-sm-8")
-		document.getElementById('map').classList.add("col-sm-12")
-		document.getElementById('editPanel').style.display = "none"
-		map.updateSize()
-	}
-}
-
-var typeInterraction = document.getElementById('typeAction')
-typeInterraction.onchange = function() {
-	newActionFct()
-}
-
-var draw
-var select = new Select();
-var modify = new Modify({
-	features: select.getFeatures()
-});
-
-export function newActionFct() {
-	map.removeInteraction(draw)
-	map.removeInteraction(select)
-	map.removeInteraction(modify)
-
-	if (typeInterraction.value == 'addPoint') {
-		displayEditPanel(true)
-		document.getElementById('uploadModule').style.display = "inline"
-
-		document.getElementById('nameValue').value = ''
-		document.getElementById('catValue').value = '-'
-		document.getElementById('descValue').value = ''
-
-		let tempSource = localGeoLayer.getSource()
-		let sizeJson = tempSource.getFeatures().length
-		let maxId = 0
-		for (let i = 0; i < sizeJson; i++) {
-			if (tempSource.getFeatures()[i].values_.id > maxId) {
-				maxId = tempSource.getFeatures()[i].values_.id
-			}
-		}
-		let nextId = maxId + 1
-		document.getElementById('idValue').value = nextId
-
-		draw = new Draw({
-			source: tempSource,
-			type: ("Point")
-		})
-
-		map.addInteraction(draw)
-		console.log(draw)
-		tempSource.addFeatures(draw)
-
-		//Ajout des attributs
-		draw.on('drawstart', function (e) {
-			// Vérificatioin que les attributs ont été renseignés
-			if (document.getElementById('nameValue').value == '' || 
-			document.getElementById('catValue').value == '-') {
-				draw.abortDrawing()
-				document.getElementById('alertText').innerText = "Renseignez d'abord les propriétées, puis placez le point sur la carte"
-				document.getElementById('alertBar').style.display = "block"
-			} else {
-				// on enregistre les propriétés
-				e.feature.setProperties({
-					'id': nextId,
-					'name': document.getElementById('nameValue').value,
-					'category': document.getElementById('catValue').value,
-					'description': document.getElementById('descValue').value
-				})
-			}
-		});
-
-		//Apres avoir ajouté un point on quitte le mode ajout, on exporte la donnée et on nettoie le formulaire
-		draw.on('drawend', function (e) {
-			map.removeInteraction(draw)
-			typeInterraction.value = "-"
-			//on exporte apres 500ms (sinon donnée pas encore validé dans draw)
-			setTimeout(() => {
-				exportGeoJson()
-			}, 500)
-			// A FAIRE : notif flottante : Ajout point ok
-		});
-	} else if (typeInterraction.value == 'modify') {
-		displayEditPanel(true)
-
-		document.getElementById('uploadModule').style.display = "inline"
-		map.addInteraction(select)
-		map.addInteraction(modify)
-
-
-		select.on('select',function (e){
-			if (e.selected.length >= 1 ) {
-				console.log(e)
-				document.getElementById('idValue').value=e.selected[0].values_.id
-				document.getElementById('nameValue').value=e.selected[0].values_.name
-				document.getElementById('catValue').value=e.selected[0].values_.category
-				document.getElementById('descValue').value=e.selected[0].values_.description
-				
-			}
-			else {
-				console.log("Select END")
-				console.log(e)
-				//mise à jour des attributs
-				e.deselected[0].values_.name=document.getElementById('nameValue').value
-				e.deselected[0].values_.category=document.getElementById('catValue').value
-				e.deselected[0].values_.description=document.getElementById('descValue').value
-				setTimeout(() => {
-					exportGeoJson()
-				}, 500)
-				setTimeout(() => {
-					document.getElementById('idValue').value = ''
-					document.getElementById('nameValue').value = ''
-					document.getElementById('catValue').value = '-'
-					document.getElementById('descValue').value = ''
-				}, 500)
-			} 
-
-		})
-	} else {
-		displayEditPanel(false)
-		document.getElementById('idValue').value = ''
-		document.getElementById('nameValue').value = ''
-		document.getElementById('catValue').value = '-'
-		document.getElementById('descValue').value = ''
-		document.getElementById('uploadModule').style.display = "none"
-		//document.getElementById('editPanel').innerHTML = ''
-
-	}
-}
-
-
-/////////////////////////////////////////////////////////////////////
-// Export de la donnée GeoJson                                     //
-/////////////////////////////////////////////////////////////////////
-
-function exportGeoJson() {
-	console.log("EXPORTATION")
-	var writer = new GeoJSON()
-	
-	var geojsonStr = writer.writeFeatures(localGeoLayer.getSource().getFeatures())
-	//il faut rajouter le crs dans la donnée sinon ca bugge
-	geojsonStr = geojsonStr.slice(0, 1) + '"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" } },' + geojsonStr.slice(1);
-
-//	document.getElementById("demo").innerHTML = geojsonStr2
-
-	//envoie du fichier eu serveur via node js
-	$.ajax({
-		url: "./storejson/",
-		type: "get", //send it through get method
-		data: { 
-			data: geojsonStr,
-		},
-		dataType: 'text',
-		success: function(data,response) {
-			console.log(response)
-			console.log(data)
-		},
-		error: function(xhr) {
-		  console.log('ko')
-		}
-	});
-
-}
-/*
-//A chaque click sur la carte on exporte la donnée (ou mettre un bouton save)
-map.on("singleclick", function(evt){
-	console.log("EXPORT")
-	exportGeoJson()
-})
-*/
-// Permettre la suppression des points sélectionnés
-document.addEventListener('keydown', function (e){
-	// A FAIRE : combinaison de touche ou bouton pour éviter confilit qd on saisit texte
-	//if(e.key == "Delete" && (e.key == "ShiftLeft" || e.key == "ShiftRight")) {
-	if(e.key == "Delete") {
-		//on enleve le comportement par default du navigateur
-		e.preventDefault();
-		//Si un objet est sélectionné, on le supprime
-		if (select.getFeatures().item(0) !== undefined) {
-			var selectedFeature = select.getFeatures().item(0);
-			//Remove it from your feature source
-			localGeoLayer.getSource().removeFeature(selectedFeature)
-		}
-	}
-})
-
 
 document.getElementById("closeAlertBtn").onclick = function() {
 	document.getElementById('alertText').innerText = ''
@@ -384,7 +183,6 @@ document.getElementById("closeAlertBtn").onclick = function() {
 
 window.onload = function() {
 	listCatInitialisation()
-	console.log("1")
 
 	//on attend un peu le temps de charger la liste des cat
 	// A FAIRE : améliorer
@@ -392,41 +190,4 @@ window.onload = function() {
 		addPoiToMap()
 	}, 1000)
 	
-	console.log("2")
-}
-
-
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-//
-//             UPLOAD PHOTOS
-//
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-
-document.getElementById("uploadPhotoBtn").onclick = function() {
-	if (document.getElementById("photoFile").files[0] != undefined) {
-		// on recupere la photo selectionnée
-		let photo = document.getElementById("photoFile").files[0]
-		//on créé un objet pour envoyer les data au serveur
-		var formData = new FormData()
-
-		let filename = 'id_' + document.getElementById("idValue").value + '.jpg'
-
-		//on rempli l'objet
-		formData.append('photo', photo)
-		formData.append('name', filename) // A FAIRE : id automatique de chaque point
-
-		// requete pour le serveur (voir aussi $AJAX (jquery) ou fetch)
-		var request = new XMLHttpRequest();
-		request.open("POST", "./uploadphoto/");
-		request.send(formData);
-
-		//alert("Upload OK")
-		document.getElementById('alertText').innerText = "Upload de la photo fini !"
-		document.getElementById('alertBar').style.display = "block"
-		// A FAIRE : Rajouter notif flottante qd upload ok
-	}
 }
