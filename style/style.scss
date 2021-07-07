@@ -74,11 +74,11 @@ body {
 */
 
 #editCatBar{
-  margin: 20px
+  margin: 20px 100px;
 }
 
 .elementCat{
-  display : inline;
+  //display : inline;
   //border : 1px solid black;
   padding: 1px 5px;
   margin-left: 20px;
@@ -87,40 +87,31 @@ body {
 
 .deleteCat {
   margin-left: 5px;
+  float:right;
 }
 
 #addCatBtn {
   margin-left: 15px;
+  float:right;
 }
 
-#newCatColor {
-  margin-left: 15px;
-  width: 20px;
-  height: 20px;
-}
 
 .colorLabel{
   margin-left: 10px;
   //background-color: #F0F;
-  height: 24px;
-  width: 24px;
-  border-radius: 12px;
+  height: 20px;
+  width: 20px;
+  border-radius: 10px;
   border-color: #000;
   border: 1px solid #666;
+  float:right;
 }
 
 .colorLabelInput {
   visibility: hidden;
 }
 
-.colorPicker {
-  display: inline-block;
-  margin-left: 5px;
-  width: 20px;
-  height: 20px;
-  border-radius: 10px;
-  background: green;
-}
+
 
 /*
 .btn {

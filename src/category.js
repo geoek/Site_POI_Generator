@@ -96,18 +96,18 @@ export let updateListCat = function() {
 		if (listCat[cat].name != '-') {
 //			let htmlToAdd = '<li class="list-group-item elementCat">' + listCat[cat] + '<span class="deleteCat badge bg-danger" id="btn_' + listCat[cat] + '"> - </span></li>'
 			let htmlToAdd = '<li class="elementCat">' + listCat[cat].name
+			htmlToAdd += '<span class="deleteCat badge bg-danger" id="btn_' + listCat[cat].name + '"> x </span>'
 			htmlToAdd += '<label class="colorLabel" style="background-color:' + listCat[cat].color  + '"><input type="color" class="colorLabelInput" id="color_' + listCat[cat].name + ' "name="CatColor"></label>'
-			htmlToAdd += '<span class="deleteCat badge bg-danger" id="btn_' + listCat[cat].name + '"> x </span></li>'
+			htmlToAdd += '</li>'
 			
 			catBarHtml += htmlToAdd
 		}
 	}
-	catBarHtml += "</ul>"
+	catBarHtml += "</ul> <hr>"
 
 	// Champ de nouvelle cat
 	catBarHtml += "<label>&nbsp Nouvelle Catégorie : &nbsp</label>"
 	catBarHtml += '<input type="text" id="newCat" name="newCat">'
-	catBarHtml += '<label class="colorLabel"><input type="color" id="newCatColor" class="colorLabelInput" name="newCatColor" value="#FF00FF" "></label>'
 
 	// bouton de nouvelle cat
 	let addButton = document.createElement('button')
@@ -115,6 +115,8 @@ export let updateListCat = function() {
 	addButton.setAttribute("id", "addCatBtn")
 	addButton.setAttribute("class", "btn btn-primary")
 	catBarHtml += addButton.outerHTML
+
+	catBarHtml += '<label class="colorLabel"><input type="color" id="newCatColor" class="colorLabelInput" name="newCatColor" value="#FF00FF" "></label>'
 
 	// Affichage du html
 	document.getElementById("editCatBar").innerHTML = catBarHtml
