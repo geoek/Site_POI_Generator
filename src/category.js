@@ -74,7 +74,7 @@ export function listCatInitialisation() {
 }
 */
 
-
+/*
 document.getElementById("editCatButton").onclick = function() {
 	if (document.getElementById("editCatBar").style.height == "0px") {
 		document.getElementById("editCatBar").style.height = "30px"
@@ -84,11 +84,11 @@ document.getElementById("editCatButton").onclick = function() {
 		document.getElementById("editCatBar").innerHTML = ""
 	}
 }
-
+*/
 
 
 // Creation de la liste de gestion des cat	
-let updateListCat = function() {
+export let updateListCat = function() {
 	//let catBarHtml = '<ul class="list-group">'
 	let catBarHtml = '<ul>'
 	for (let cat in listCat) {

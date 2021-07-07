@@ -8,6 +8,7 @@ import * as EditPanel from './editPanel.js'
 export function displayStoryPanel(order) {
 	if (order) {
         EditPanel.displayEditPanel(false)
+        EditPanel.displayEditCatPanel(false)
 		// Activation du panel
 		document.getElementById('map').classList.remove("col-sm-12")
 		document.getElementById('map').classList.add("col-sm-8")
