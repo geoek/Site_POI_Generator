@@ -69,7 +69,7 @@ app.get('/storelistcat/', (request, response) => {
 
 //UPLOAD de la photo
 app.post('/uploadphoto/', (request, response) => {
-   //on récupère la photo (dans files) et le nom (dans body)
+    //on récupère la photo (dans files) et le nom (dans body)
     var photoFile = request.files.photo.data
     var photoName = request.body.name
     
@@ -82,8 +82,22 @@ app.post('/uploadphoto/', (request, response) => {
             response.end()
         }
     })
-})
+ })
 
+ //DELETE de la photo
+app.get('/deletephoto/', (request, response) => {
+    var photoName = request.query.filename
+    console.log('Delete the photo ' + photoName)
+    console.log(request.query)
+    fs.unlink("./data/img/" + photoName, (err) => {
+       if (err) {
+           console.log("failed to delete local image:"+err);
+       } else {
+           console.log('successfully deleted local image');                                
+       }
+   });
+})
+ 
 
 
 

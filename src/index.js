@@ -21,6 +21,7 @@ import {listCat, listCatInitialisation} from './category.js'
 import './category.js'
 import './story.js'
 import './editPanel.js'
+import './uploadPhoto.js'
 
 
 
