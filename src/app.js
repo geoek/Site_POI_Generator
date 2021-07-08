@@ -26,30 +26,63 @@ app.use("/data", express.static('./data/'))
 app.use("/style", express.static('./style/'))
 
 app.use(upload())
-
+/*
 app.get('/storejson/', (request, response) => {
     var jsonString = request.query.data;
     fs.writeFile('./data/mygeojson.geojson', jsonString, err => {
         if (err) {
-            console.log('Error writing file', err)
+            console.log('Error writing GeoJson', err)
         } else {
-            console.log('Successfully wrote file')
+            console.log('Successfully wrote GeoJson')
         }
     })
 })
-
+*/
+app.post('/storejson/', (request, response) => {
+    //on récupère la photo (dans files) et le nom (dans body)
+    var jsonString = request.body.geojson
+    
+    console.log(jsonString)
+    fs.writeFile('./data/mygeojson.geojson', jsonString, err => {
+        if (err) {
+            console.log('Error writing GeoJson', err)
+        } else {
+            console.log('Successfully wrote GeoJson')
+            response.end()
+        }
+    })
+ })
+/*
 app.get('/storelistcat/', (request, response) => {
     var jsonString = request.query.data;
+    console.log(jsonString)
     var myJSON = JSON.stringify(jsonString)
     console.log(myJSON)
     fs.writeFile('./data/listCat.json', myJSON, err => {
         if (err) {
-            console.log('Error writing file', err)
+            console.log('Error writing Cat Json', err)
         } else {
-            console.log('Successfully wrote file')
+            console.log('Successfully wrote Cat Json')
         }
     })
 })
+*/
+app.post('/storelistcat/', (request, response) => {
+    //on récupère la photo (dans files) et le nom (dans body)
+    var jsonString = request.body.listcat
+    
+    console.log(jsonString)
+    fs.writeFile('./data/listCat.json', jsonString, err => {
+        if (err) {
+            console.log('Error writing Cat Json', err)
+        } else {
+            console.log('Successfully wrote Cat Json')
+            response.end()
+        }
+    })
+ })
+
+
 
 /*
         var id = request.query.id; 

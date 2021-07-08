@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import * as MyMainVar from './index.js'
+
 //////////////////////////////////////////////////
 ///             Création liste de Catégories   ///
 //////////////////////////////////////////////////
@@ -205,12 +205,20 @@ function updateSelectCat() {
 
 function saveJsonCat() {
 	console.log("SAVE JSON CAT")
+	
+	//on créé un objet pour envoyer les data au serveur
+	var jsonStr = JSON.stringify(listCat)
+	console.log(jsonStr)
+	var formData = new FormData()
+	//on rempli l'objet
+	formData.append('listcat', jsonStr)
+	// requete pour le serveur (voir aussi $AJAX (jquery) ou fetch)
+	var request = new XMLHttpRequest();
+	request.open("POST", "./storelistcat/");
+	request.send(formData);
 
-	
-	var jsonStr = listCat
-	//il faut rajouter le crs dans la donnée sinon ca bugge
-	
-	//envoie du fichier eu serveur via node js
+/*
+	//envoie du fichier eu serveur via node js et Jquery et GET : à éviter
 	$.ajax({
 		url: "./storelistcat/",
 		type: "get", //send it through get method
@@ -226,7 +234,7 @@ function saveJsonCat() {
 		  console.log('ko')
 		}
 	});
-
+*/
 }
 
 
