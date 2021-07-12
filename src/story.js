@@ -106,8 +106,8 @@ function createStoryBoard() {
 		console.log(jsonData)
 
 		let htmlStory = `
-			<button id="prevButton" class="btn btn-success"> <b>-</b> </button>
-			<button id="nextButton" class="btn btn-success"> <b>+</b> </button>
+			<button id="prevButton" class="btn btn-success btn-nav-story"> <b>-</b> </button>
+			<button id="nextButton" class="btn btn-success btn-nav-story"> <b>+</b> </button>
 			<div class="contentOnglets" id="contenuOnglet">
 
 			</div>
