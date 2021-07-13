@@ -231,3 +231,18 @@ body {
   right: 10px;
   float: right;
 }
+
+#alertBar {
+  max-height: 50em;
+  transition: opacity .9s ease-in-out, max-height .9s ease-in-out .5s;
+}
+
+.fade-out {
+  opacity: 0;
+  max-height: 0;
+}
+
+.fade-in {
+  opacity: 1;
+  max-height: 0;
+}

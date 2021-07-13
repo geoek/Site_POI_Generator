@@ -177,8 +177,10 @@ map.on('singleclick', function (event) {
 
 
 document.getElementById("closeAlertBtn").onclick = function() {
-	document.getElementById('alertText').innerText = ''
-	document.getElementById('alertBar').style.display = "none"
+	//document.getElementById('alertText').innerText = ''
+	document.getElementById('alertBar').classList.remove('fade-in');
+	document.getElementById('alertBar').classList.add('fade-out');
+	//document.getElementById('alertBar').style.display = "none"
 };
 
 

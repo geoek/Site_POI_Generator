@@ -151,6 +151,8 @@ export let updateListCat = function() {
 							if (trouve) {
 								document.getElementById('alertText').innerText = "Il existe un point avec cette catégorie"
 								document.getElementById('alertBar').style.display = "block"
+								document.getElementById('alertBar').classList.remove('fade-out')
+								document.getElementById('alertBar').classList.add('fade-in')
 							} else {
 								// on supprime 1 element à la position j
 								listCat.splice(j,1)
@@ -182,6 +184,8 @@ export let updateListCat = function() {
 		} else {
 			document.getElementById('alertText').innerText = newCat + " Vide ou existe déjà !"
 			document.getElementById('alertBar').style.display = "block"
+			document.getElementById('alertBar').classList.remove('fade-out')
+			document.getElementById('alertBar').classList.add('fade-in')
 		}
 	}
 
